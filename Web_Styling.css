@@ -2,6 +2,7 @@ body{
     background-color: rgb(66, 66, 66); 
     margin:0; 
     padding:0;
+    font-family: 'Cormorant Garamond', serif;
 }
 h1{
     color:rgb(253, 57, 57);
@@ -9,7 +10,7 @@ h1{
     padding:0;
     margin-top: 3%;
     margin-right: 10%;
-    font-size: 40px;
+    font-size: 36px;
     font-family: 'Cormorant Garamond', serif;
 }
 #i01{
@@ -19,19 +20,19 @@ h1{
 #d01{
     background-color: rgb(247, 245, 245);
     padding: 20px;
-    overflow: hidden;
     margin: 0;
     padding:0;
     display: block;
 }
 ul {
+    top:0;
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color:  #8f8f8f;
-    position: -webkit-sticky;
     position: sticky;
+    z-index: 99;
 }
   
 li{
@@ -47,10 +48,87 @@ li a {
 }
   
 li a:hover {
-    background-color: #111;
+    background-color: rgb(97, 97, 97);
+    transition: 0.3s;
 }
 .active {
     background-color:rgb(255, 49, 49);
 }
   
+.slideshow-container {
+    max-width: 1300px;
+    position: relative;
+    margin: auto;
+}
+.mySlides {
+    display: none;
+}
   
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+}
+  
+ 
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+.prev:hover, .next:hover {
+    background-color: rgba(255, 0, 0, 0.8);
+}
+  
+.text {
+    border-radius: 16px;
+    display: inline-block;
+    background-color: rgb(20, 20, 20);
+    color: #fffefe;
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 8px;
+    width: 20%;
+    margin-left: 39%;
+    text-align: center;
+}
+
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+  
+.dot:hover {
+    background-color: #717171;
+}
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
+}
+  
+@-webkit-keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+  
+@keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
