@@ -19,10 +19,26 @@ h1{
 }
 #d01{
     background-color: rgb(247, 245, 245);
-    padding: 20px;
     margin: 0;
     padding:0;
     display: block;
+}
+#h02{
+    color: white;
+    margin-left: 42%;
+}
+#d02{
+    color: white;
+    width: 50%;
+    height:100%;
+    border: 4px solid;
+    border-color: #fc1313;
+    background-color: #8f8f8f;
+    padding:1px;
+    margin:0;
+    display: block;
+    border-radius: 16px;
+
 }
 ul {
     top:0;
@@ -57,13 +73,16 @@ li a:hover {
   
 .slideshow-container {
     max-width: 1300px;
+    max-height: 500px;
     position: relative;
     margin: auto;
 }
 .mySlides {
     display: none;
 }
-  
+#slide1{
+    display:block
+}  
 .prev, .next {
     cursor: pointer;
     position: absolute;
@@ -92,7 +111,7 @@ li a:hover {
     border-radius: 16px;
     display: inline-block;
     background-color: rgb(20, 20, 20);
-    color: #fffefe;
+    color: #f3f3f3;
     font-size: 15px;
     padding: 8px 12px;
     position: absolute;
