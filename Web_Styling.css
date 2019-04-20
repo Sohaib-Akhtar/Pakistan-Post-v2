@@ -2,7 +2,7 @@ body{
     background-color: rgb(66, 66, 66); 
     margin:0; 
     padding:0;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Ubuntu', "Open Sans";
 }
 h1{
     color:rgb(253, 57, 57);
@@ -11,11 +11,21 @@ h1{
     margin-top: 3%;
     margin-right: 10%;
     font-size: 36px;
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Ubuntu', "Open Sans";
+}
+
+#h01{
+    color:rgb(253, 57, 57);
+    float: right; 
+    margin-right: 4.5%;
+    margin-top: 4.5%;
+    padding:0;
+    font-size: 34px;
+    font-family: 'Ubuntu', "Open Sans";
+    font-weight: 100;
 }
 #i01{
     height: 150px;
-    width: 450px;
 }
 #d01{
     background-color: rgb(247, 245, 245);
