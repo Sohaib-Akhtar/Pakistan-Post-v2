@@ -9,9 +9,9 @@ body{
     color:rgb(253, 57, 57);
     float: right; 
     margin-right: 4.5%;
-    margin-top: 1%;
+    margin-top: 1.2%;
     padding:0;
-    font-size: 2.22vw;
+    font-size: 2vw;
     font-family: 'Ubuntu', "Open Sans";
     font-weight: 100;
 }
@@ -23,7 +23,7 @@ body{
     overflow: hidden;
 }
 #i01{
-    height: 15%;
+    height: 5vw;
 }
 #d01{
     background-color: rgb(247, 245, 245);
