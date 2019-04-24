@@ -4,25 +4,23 @@ body{
     padding:0;
     font-family: 'Ubuntu', "Open Sans";
 }
-h1{
-    color:rgb(253, 57, 57);
-    float: right; 
-    padding:0;
-    margin-top: 3%;
-    margin-right: 10%;
-    font-size: 36px;
-    font-family: 'Ubuntu', "Open Sans";
-}
 
 #h01{
     color:rgb(253, 57, 57);
     float: right; 
     margin-right: 4.5%;
-    margin-top: 2.5%;
+    margin-top: 1%;
     padding:0;
-    font-size: 300%;
+    font-size: 2.22vw;
     font-family: 'Ubuntu', "Open Sans";
     font-weight: 100;
+}
+#p01{
+    background-color:#717171;
+    padding:10px;
+    margin:10px;
+    font-size: 19px;
+    overflow: hidden;
 }
 #i01{
     height: 15%;
@@ -34,21 +32,98 @@ h1{
     display: block;
 }
 #h02{
+    background-color: #fc1313;
+    padding:15px;
+    width:8.5vw;    
+    border-radius: 30px;
+    margin-bottom: 10px;    
     color: white;
-    margin-left: 42%;
+    margin-left: 40%;
+    font-size: 30px;
+}
+#h03{
+    background-color: #fc1313;
+    padding:15px;
+    width: 16.3vw;    
+    border-radius: 35px;
+    color: white;
+    margin-left: 30%;
+    font-size: 30px;
+}
+.footer{
+    clear: both;
+    position: static;
+    left: 0;
+    border-top: 4px solid;
+    border-radius: 10px;
+    border-color: #fc1313;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+    margin-top: 5%;
+    background-color: #494949;
+    color: white;
+    text-align: center;
+}
+.footer1{
+    clear: both;
+    position: static;
+    left: 0;
+    border-top: 4px solid;
+    border-color: #525151;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+    margin-top: 5%;
+    background-color: #494949;
+    color: white;
+    text-align: center;
 }
 #d02{
     color: white;
     width: 50%;
+    height:60%;
+    border: 4px solid;
+    border-color: #fc1313;
+    background-color: #8f8f8f;
+    padding:1px;
+    margin:5px;
+    margin-left: 3%;
+    display: block;
+    border-radius: 16px;
+    float: left;
+    margin-bottom: 4%;
+}
+#li1{
+    padding:5px;
+    background-color: #717171;
+    font-size: 20px;
+}
+#d03{
+    color: white;
+    width: 40%;
+    height:60%;
+    float: right;
+    border: 4px solid;
+    border-color: #fc1313;
+    background-color: #8f8f8f;
+    padding:1px;
+    margin:5px;
+    margin-right: 3%;
+    display: block;
+    border-radius: 16px;
+    margin-bottom: 4%;
+}
+#d04{
+    color: white;
+    width: 60%;
     height:100%;
     border: 4px solid;
     border-color: #fc1313;
     background-color: #8f8f8f;
     padding:1px;
-    margin:0;
-    display: block;
+    margin:20 auto;
     border-radius: 16px;
-
 }
 ul {
     top:0;
@@ -56,15 +131,41 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color:  #8f8f8f;
+    background-color: #807f7f;
     position: sticky;
     z-index: 99;
 }
-  
+#ul2{
+    margin-left:3%;
+    padding: 10px;
+    background-color: #8f8f8f;
+} 
+#ul1{
+    list-style-type: none;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color:#494949;
+}
+
+.footer-elements{
+    background-color: #494949;
+}
+.footer-elements li{
+    width: 10%;
+    height: 30px;  
+    float:none;
+    margin-left: 42%;
+    text-align: center;
+}
+.footer-elements li a:hover{
+    background-color: rgb(255, 0, 0);
+    text-decoration: underline;
+    transition: 0.7s;
+}
 li{
     float: left;
 }
-  
+
 li a {
     display: block;
     color: white;
@@ -78,7 +179,7 @@ li a:hover {
     transition: 0.3s;
 }
 .active {
-    background-color:rgb(255, 49, 49);
+    background-color:rgb(253, 31, 31);
 }
   
 .slideshow-container {
@@ -160,4 +261,65 @@ li a:hover {
 @keyframes fade {
     from {opacity: .4} 
     to {opacity: 1}
+}
+table{
+    border:10px;
+    border-collapse: collapse;
+    padding: 4px;
+    border-color: rgb(255, 49, 49);
+    margin-bottom: 20px; 
+}
+tr{
+    color:white;
+}
+input[type=text], input[type=password], input[type=date]{
+    width: 100%;
+    height: 40px;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border-radius: 16px;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus, input[type=date]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+td{
+    text-align: center;
+}
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+label{
+    color:white;
+    font-size: 18px;
+
+}
+#cp1{
+    margin-left: 8%;
+}
+#fit1{
+    font-size: 12px;
+}
+#td1{
+    margin-left: 10%;
+}
+.registerbtn {
+    background-color: rgb(255, 49, 49);
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    border-radius: 16px;
+    width: 100%;
+    transition: 0.4s;
+    opacity: 0.9;
+}
+.registerbtn:hover{
+    background-color: rgb(248, 6, 6);
 }
