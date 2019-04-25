@@ -144,7 +144,7 @@ body{
     background-color: #807f7f;
     position: sticky;
     z-index: 99;
-    box-shadow: 0px 1px 14px #2c2929;
+    box-shadow: 0px 1px 14px -2px #2c2929;
 }
 #ul2{
     margin-left:3%;
@@ -304,6 +304,7 @@ input[type=text], input[type=password], input[type=date]{
     display: inline-block;
     border: none;
     background: #f1f1f1;
+    box-shadow: 0px 0px 30px -8px #2c2929;
 }
 
 input[type=text]:focus, input[type=password]:focus, input[type=date]:focus {
@@ -313,6 +314,11 @@ input[type=text]:focus, input[type=password]:focus, input[type=date]:focus {
 td{
     text-align: center;
 }
+#td2{
+    font-size: 1.2vw;
+    padding-bottom: 1vw;
+    padding-right: 1vw;
+}
 hr {
     border: 1px solid #f1f1f1;
     margin-bottom: 25px;
@@ -320,7 +326,6 @@ hr {
 label{
     color:white;
     font-size: 18px;
-
 }
 #cp1{
     margin-left: 8%;
