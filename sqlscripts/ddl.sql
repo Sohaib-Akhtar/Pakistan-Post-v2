@@ -64,6 +64,7 @@ Create table City(
     Constraint CTY_pk primary key(City_ID),
     Constraint CTY_fk foreign key(Province_ID) references Province(Province_ID)
 );
+
 Create table PostOffice(
     PostalCode numeric(5) not null,
     PostOffice_Name varchar2(40) not null,
