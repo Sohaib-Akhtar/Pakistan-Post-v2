@@ -43,8 +43,6 @@
                                  $a = oci_parse($con, $query1); 
                                  $r = oci_execute($a);
                                  $val=0;
-                                 
-
                                  while($row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS))  
       	                         {
                                     echo "<option>" . $row['YEAR'] . "</option>";
@@ -75,21 +73,22 @@
             $a1 = oci_parse($con,$query);
             $r1 = oci_execute($a1);
 
-            $query="select sum(totalprice) as sum 
-            from invoice 
-            where totalprice>0 and postalcode='$id' 
-            group by extract(month from invoice_date)";
+            $query="
+            select sum(totalprice) as sum,extract(month from invoice_date) as month
+                        from invoice 
+                        where postalcode='$id'
+                        group by extract(month from invoice_date)";
             $a2 = oci_parse($con, $query); 
             $r2 = oci_execute($a2);
 
             $query="select sum(totalprice) as negsum 
             from invoice 
-            where totalprice<0 and postalcode='$id' 
+            where postalcode='$id' 
             group by extract(month from invoice_date)";
             $a3 = oci_parse($con, $query); 
             $r3 = oci_execute($a3);
 
-            $query="select sum(totalprice) as netsum 
+            $query="select count(invoice_id) as collections ,sum(totalprice) as netsum 
             from invoice 
             where postalcode='$id' 
             group by extract(month from invoice_date)";
@@ -106,15 +105,15 @@
             <tr id="td2">
             <?php
              while($row1 = oci_fetch_array($a1, OCI_BOTH+OCI_RETURN_NULLS)){
-                $row2 = oci_fetch_array($a2, OCI_BOTH+OCI_RETURN_NULLS);
+                $row2 = oci_fetch_array($a2, OCI_BOTH+OCI_RETURN_NULLS);  
                 $row3 = oci_fetch_array($a3, OCI_BOTH+OCI_RETURN_NULLS);
                 $row4 = oci_fetch_array($a4, OCI_BOTH+OCI_RETURN_NULLS);
             ?>
             <tr>
                 <td id="td2"><?php if ($row1["COLLECTIONS"])echo $row1["COLLECTIONS"];else echo '-';?></td>
                 <td id="td2"><?php if ($row1["MONTH"])echo $row1["MONTH"];else echo '-';?></td>
-                <td id="td2"><?php if ($row2["SUM"])echo $row2["SUM"];else echo '-';?></td>
-                <td id="td2"><?php if ($row3["NEGSUM"])echo $row3["NEGSUM"];else echo '-';?></td>
+                <td id="td2"><?php if ($row2["SUM"] && $row2["SUM"]> 0)echo $row2["SUM"];else echo '-';?></td>
+                <td id="td2"><?php if  ($row3["NEGSUM"]<0)echo $row3["NEGSUM"];else echo '-';?></td>
                 <td id="td2"><?php if ($row4["NETSUM"])echo $row4["NETSUM"];else echo '-';?></td>
             </tr>   
            <?php }} ?>
