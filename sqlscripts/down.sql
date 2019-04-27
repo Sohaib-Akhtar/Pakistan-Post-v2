@@ -1,7 +1,6 @@
 DROP TABLE PostalEmployee cascade constraints;
 DROP TABLE ContentType cascade constraints;
 DROP TABLE MailType cascade constraints;
-DROP TABLE Priority cascade constraints;
 DROP TABLE Details cascade constraints;
 DROP TABLE StatusType cascade constraints;
 DROP TABLE POType cascade constraints;
