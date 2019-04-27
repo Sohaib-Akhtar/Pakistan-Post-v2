@@ -90,7 +90,7 @@ INSERT ALL
 	INTO City (City_ID,Province_ID,Name) VALUES (299, 'SNDH', 'Karachi')
 	INTO City (City_ID,Province_ID,Name) VALUES (300, 'SNDH', 'Dadu')
 	INTO City (City_ID,Province_ID,Name) VALUES (301, 'SNDH', 'Hyderabad')
-	INTO City (City_ID,Province_ID,Name) VALUES (456, 'FEDR', 'Islamabad')
+	INTO City (City_ID,Province_ID,Name) VALUES (456, 'FDRL', 'Islamabad')
 	INTO PostOffice (PostalCode,PostOffice_Name,AccountOffice_ID,Manager_ID,TelNo,Province_ID,Type_ID) VALUES (09001, 'INDUSTRIAL AREA HUB', 89100, NULL, NULL, 'BLCH', 02)
 	INTO PostOffice (PostalCode,PostOffice_Name,AccountOffice_ID,Manager_ID,TelNo,Province_ID,Type_ID) VALUES (08481, 'LORALAI CANTT', 84800, NULL, NULL, 'BLCH', 02)
 	INTO PostOffice (PostalCode,PostOffice_Name,AccountOffice_ID,Manager_ID,TelNo,Province_ID,Type_ID) VALUES (08734, 'QUETTA CANTT', 87300, NULL, NULL, 'BLCH', 02)
