@@ -23,32 +23,31 @@
     </ul>
     <div id="d05">
         <h1 align="center">Annual Fund Collection</h1>
-        <table align="center">
-            <form name="reg" action="Earning.php" method="post">
+        <form name="reg" action="Earning.php" method="post">
+            <table align="center">
                 <hr>
                 <tr>
                     <td id="td2">Branch Code:</td>
-                    <td><input type="text" name="name" value="" placeholder="Branch Postal Code"></td>
+                    <td><input type="text" name="brcode" value="" placeholder="Branch Postal Code"></td>
                 </tr>
                 <tr>
                     <td id="td2">Enter Year:</td>
                     <td>
                         <div class="custom-select">
                             <select>
-                                <option>2018</option>
                                 <?php
-                                $db_sid = "(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = pc1)(PORT = 1521)) ) (CONNECT_DATA = (SID = orcl) ) )"; 
                                 $db_user = "scott"; 
                                 $db_pass = "1234";
-                                
-                                 $con = oci_connect($db_user,$db_pass); 
-                                 $query1="select Customer_ID from customer";
+                                 $con = oci_connect($db_user,$db_pass);
+                                 $query1="select distinct extract(year from invoice_date) as year from invoice";
                                  $a = oci_parse($con, $query1); 
                                  $r = oci_execute($a);
                                  $val=0;
+                                 
+
                                  while($row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS))  
       	                         {
-                                    echo "<option>" . $row['CUSTOMER_ID'] . "</option>";
+                                    echo "<option>" . $row['YEAR'] . "</option>";
                                     $val+=1;
                                 } 
                                 ?>
@@ -59,17 +58,44 @@
                 <tr>
                     <td></td>
                 </tr>
-            </form>
-        </table>
-        <input class="registerbtn2" type="submit" name="Display" value="Display">
+            </table>
+            <input class="registerbtn2" type="submit" name="Display" value="Display">
+        </form>
         <hr>
-        <?php
-        $id=$_POST['id'];
-        $query="select * from client where userid='$id'";
-        $a = oci_parse($con, $query); 
-        $r = oci_execute($a);
-    ?>
         <table border="true" class="display-table" align="center">
+        <?php
+        if(isset($_POST['Display'])){
+            $id=$_POST['brcode'];
+
+            $query="select extract(month from invoice_date) as month,count(invoice_id) as collections 
+            from invoice 
+            where postalcode='$id'
+            group by extract(month from invoice_date)
+            ";
+            $a1 = oci_parse($con,$query);
+            $r1 = oci_execute($a1);
+
+            $query="select sum(totalprice) as sum 
+            from invoice 
+            where totalprice>0 and postalcode='$id' 
+            group by extract(month from invoice_date)";
+            $a2 = oci_parse($con, $query); 
+            $r2 = oci_execute($a2);
+
+            $query="select sum(totalprice) as negsum 
+            from invoice 
+            where totalprice<0 and postalcode='$id' 
+            group by extract(month from invoice_date)";
+            $a3 = oci_parse($con, $query); 
+            $r3 = oci_execute($a3);
+
+            $query="select sum(totalprice) as netsum 
+            from invoice 
+            where postalcode='$id' 
+            group by extract(month from invoice_date)";
+            $a4 = oci_parse($con, $query); 
+            $r4 = oci_execute($a4);
+            ?>
             <tr>
                 <th># of Collections</th>
                 <th>Month</th>
@@ -77,19 +103,22 @@
                 <th>Amount Returned</th>
                 <th>Net Amount</th>
             </tr>
+            <tr id="td2">
             <?php
-        while($row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS))  
-      	{
-    ?>
+             while($row1 = oci_fetch_array($a1, OCI_BOTH+OCI_RETURN_NULLS)){
+                $row2 = oci_fetch_array($a2, OCI_BOTH+OCI_RETURN_NULLS);
+                $row3 = oci_fetch_array($a3, OCI_BOTH+OCI_RETURN_NULLS);
+                $row4 = oci_fetch_array($a4, OCI_BOTH+OCI_RETURN_NULLS);
+            ?>
             <tr>
-                <td><?php echo $row["USERID"];?></td>
-                <td><?php echo $row["UNAME"];?></td>
-                <td><?php echo $row["DOB"];?></td>
-                <td><?php echo $row["EMAIL"];?></td>
-                <td><?php echo $row["GENDER"];?></td>
-            </tr>
-            <?php  } ?>
-        </table>
+                <td id="td2"><?php if ($row1["COLLECTIONS"])echo $row1["COLLECTIONS"];else echo '-';?></td>
+                <td id="td2"><?php if ($row1["MONTH"])echo $row1["MONTH"];else echo '-';?></td>
+                <td id="td2"><?php if ($row2["SUM"])echo $row2["SUM"];else echo '-';?></td>
+                <td id="td2"><?php if ($row3["NEGSUM"])echo $row3["NEGSUM"];else echo '-';?></td>
+                <td id="td2"><?php if ($row4["NETSUM"])echo $row4["NETSUM"];else echo '-';?></td>
+            </tr>   
+           <?php }} ?>
+           </table>
     </div>
     <div class="footer">
         <img src="../images/Favicon.ico" style="float:left; height: 90%">
