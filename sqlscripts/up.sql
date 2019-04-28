@@ -200,3 +200,33 @@ Create table PostalEmployee(
     Constraint PE_pk primary key(Emp_ID),
     Constraint PE_fk foreign key(PostalOffice) references PostOffice (PostalCode)
 );
+
+Create table Stamp(
+    Stamp_ID numeric(2) not null,
+    Name varchar2(15) ,
+    Price int,
+    Constraint STMP_pk primary key(Stamp_ID),
+    Constraint STMP_price check (Price>0)
+);
+
+Create table StampInventory(
+    Stamp_ID numeric(2) not null,
+    PostalCode numeric(6) not null,
+    Qty numeric(4) not null,
+    Constraint STMPINVT_pk primary key(Stamp_ID, PostalCode),
+    Constraint STMPINVT_fk foreign key(PostalCode) references PostOffice(PostalCode),
+    Constraint STMPINVT_fk_a foreign key(Stamp_ID) references Stamp(Stamp_ID),
+    Constraint STMPINVT_qty check (Qty>=0)
+);
+
+Create table StampInvoice(
+    Invoice_ID numeric(24) not null,
+    Stamp_ID numeric(2) not null,
+    Qty numeric(4) not null,
+    TotalPrice float,
+    Constraint STMPINV_pk primary key(Invoice_ID,Stamp_ID),
+    Constraint STMPINV_fk foreign key(Invoice_ID) references Invoice(Invoice_ID),
+    Constraint STMPINV_fk_a foreign key(Stamp_ID) references Stamp(Stamp_ID),    
+    Constraint STMPINV_qty check (Qty>=0),
+    Constraint STMPINV_tpr check (TotalPrice>=0)
+);

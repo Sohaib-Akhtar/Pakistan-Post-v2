@@ -18,3 +18,6 @@ DROP TABLE Customer_Addresses cascade constraints;
 DROP TABLE Mail cascade constraints;
 DROP TABLE Mail_Invoice cascade constraints;
 DROP TABLE StatusTracking cascade constraints;
+DROP TABLE Stamp cascade constraints;
+DROP TABLE StampInventory cascade constraints;
+DROP TABLE StampInvoice cascade constraints;
