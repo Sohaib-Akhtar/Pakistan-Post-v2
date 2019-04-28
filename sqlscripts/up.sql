@@ -73,7 +73,7 @@ Create table PostOffice(
     PostalCode numeric(5) not null,
     PostOffice_Name varchar2(40) not null,
     AccountOffice_ID numeric(6),
-    Manager_ID numeric(10),
+    Manager_ID numeric(5),
     TelNo numeric(11),
     City_ID numeric(3) not null,
     Type_ID numeric(2) not null,
