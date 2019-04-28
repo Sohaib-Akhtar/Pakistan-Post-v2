@@ -119,7 +119,8 @@
                     $parse = oci_parse($con, $query); 
                     $valid = oci_execute($parse);
                     $row = oci_fetch_array($parse, OCI_BOTH+OCI_RETURN_NULLS);
-                
+                    if(!$is_id)
+                        $id = $row["CUSTID"];
             ?>
             <tr>
                 <td id="td4">Customer ID: <?php if(!is_null($row["CUSTID"])) echo $row["CUSTID"]; else echo '-';?></td>
@@ -139,7 +140,6 @@
             <tr>
                 <td id="td4">CNIC: <?php if(!is_null($row["CNIC"])) echo $row["CNIC"]; else echo '-';?></td>
             </tr>
-                <?php }?>
         </table>
     </div>
     <div id="div-4">
@@ -155,8 +155,64 @@
                 <th>Status</th>
                 <th>Date</th>
             </tr>
+            <?php
+                $query="SELECT minv.Barcode AS Tracking, Type_Name AS Description, m.Qty AS Quantity, FirstName || ' '||LastName AS RecipientName, StreetAddress, ct.Name AS CUSTNAME, Invoice_Date
+                        FROM Customer c
+                        INNER JOIN Customer_Invoice cinv
+                        ON cinv.Customer_ID = c.Customer_ID
+                        INNER JOIN Invoice inv
+                        ON inv.Invoice_ID = cinv.Invoice_ID 
+                        INNER JOIN Mail_Invoice minv
+                        ON minv.Invoice_ID = cinv.Invoice_ID
+                        INNER JOIN Mail m
+                        ON m.Barcode = minv.Barcode
+                        INNER JOIN Details d
+                        ON d.Details_ID = m.R_Detail_ID
+                        INNER JOIN ContentType ctype
+                        ON ctype.ContentType_ID = m.ContentType_ID
+                        INNER JOIN Customer_Addresses ca
+                        ON c.Customer_ID = ca.Customer_ID
+                        INNER JOIN DomesticAddresses da
+                        ON ca.Address_ID = da.Address_ID
+                        INNER JOIN City ct
+                        ON ct.City_ID = da.City_ID
+                        WHERE cinv.Customer_ID = $id and minv.Price>0
+                    "; 
+                    $parse = oci_parse($con, $query); 
+                    $valid = oci_execute($parse);
+                      
+                while($row = oci_fetch_array($parse, OCI_BOTH+OCI_RETURN_NULLS))
+                { ?>
+                    <tr>
+                        <?php
+                        $barcode = $row["TRACKING"];
+                        $query="SELECT  Description, TimeStamp FROM
+                                (
+                                    SELECT Description, TimeStamp, row_number() OVER (ORDER BY SerialNo DESC) AS rn FROM StatusTracking st
+                                    INNER JOIN StatusType s
+                                    ON st.Status_ID = s.Status_ID
+                                    WHERE Barcode = $barcode
+                                )
+                                WHERE rn = 1
+                                ";
+                        $status_parse = oci_parse($con, $query); 
+                        $status_valid = oci_execute($status_parse);                
+                        $status_row= oci_fetch_array($status_parse, OCI_BOTH+OCI_RETURN_NULLS);
+                        ?>
+                        <td><?php echo $row["TRACKING"];?></td>
+                        <td><?php echo $row["DESCRIPTION"];?></td>
+                        <td><?php echo $row["QUANTITY"];?></td>
+                        <td><?php echo $row["RECIPIENTNAME"];?></td>
+                        <td><?php echo $row["STREETADDRESS"];?></td>
+                        <td><?php echo $row["CUSTNAME"];?></td>
+                        <td><?php if( !is_null($status_row["DESCRIPTION"]))echo $status_row["DESCRIPTION"];else echo '-';?></td>
+                        <td><?php echo $row["INVOICE_DATE"];?></td>
+                    </tr>
+            <?php } ?>
+
         </table>
     </div>
+    <?php } ?>
     <br>
     <br>
     <br>

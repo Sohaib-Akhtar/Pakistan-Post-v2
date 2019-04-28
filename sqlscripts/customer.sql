@@ -15,7 +15,7 @@ FROM Customer c
 INNER JOIN Customer_Invoice cinv
 ON cinv.Customer_ID = c.Customer_ID
 INNER JOIN Invoice inv
-ON inv.Invoice_ID = cinv.Invoice_ID
+ON inv.Invoice_ID = cinv.Invoice_ID 
 INNER JOIN Mail_Invoice minv
 ON minv.Invoice_ID = cinv.Invoice_ID
 INNER JOIN Mail m
@@ -30,4 +30,4 @@ INNER JOIN DomesticAddresses da
 ON ca.Address_ID = da.Address_ID
 INNER JOIN City ct
 ON ct.City_ID = da.City_ID
-WHERE c.Customer_ID = 10000 and minv.Price>0;
+WHERE c.Customer_ID = 10005 and minv.Price>0;
