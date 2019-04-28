@@ -558,3 +558,43 @@ th{
     border-color: rgb(255, 49, 49);
     margin-bottom: 20px; 
 }
+#div-4{
+    color: white;
+    width: 60vw;
+    height: auto;
+    border: 7px solid;
+    border-color: #f73535;
+    background-color: #8f8f8f;
+    padding: 1px;
+    float:right;
+    margin-right: 19vw;
+    margin-bottom: 1vw;
+    border-radius: 16px;
+    box-shadow: 4px 8px 14px 5px #2c2929;
+}
+#h07{
+    background-color: #fc1313;
+    padding: 12px;
+    width: 14.8vw;
+    border-radius: 35px;
+    color: white;
+    margin-left: 21vw;
+    font-size: 1.5vw;
+}
+#h08{
+    background-color: #fc1313;
+    padding: 12px;
+    width: 13.8vw;
+    border-radius: 35px;
+    color: white;
+    margin-left: 21vw;
+    font-size: 1.5vw;
+}
+.display-table3{
+    border:10px;
+    width:56vw;
+    border-collapse: collapse;
+    padding: 4px;
+    border-color: rgb(255, 49, 49);
+    margin-bottom: 20px; 
+}
