@@ -20,6 +20,7 @@
         <li><a href="main.html"><i class="fa fa-fw fa-home"></i> Home</a></li>
         <li><a href="Register.html"><i class="fa fa-fw fa-address-card"></i> Register Customer</a></li>
         <li><a class="active" href="Earning.php"><i class="fa fa-fw fa-envelope"></i> Yearly Funds Collection</a></li>
+        <li><a href="track-order.html"><i class="fa fa-fw fa-search"></i> Track Order</a></li>    
     </ul>
     <div id="d05">
         <h1 align="center">Annual Fund Collection</h1>
