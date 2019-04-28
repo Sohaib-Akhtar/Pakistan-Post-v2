@@ -65,35 +65,13 @@
         if(isset($_POST['Display'])){
             $id=$_POST['brcode'];
 
-            $query="select extract(month from invoice_date) as month,count(invoice_id) as collections 
-            from invoice 
-            where postalcode='$id'
-            group by extract(month from invoice_date)
-            ";
+            $query="SELECT extract(month FROM invoice_date) AS month,COUNT(invoice_id) AS collections 
+                    FROM invoice 
+                    WHERE postalcode='$id'
+                    GROUP BY extract(month FROM invoice_date)
+                    ORDER BY extract(month FROM invoice_date) ASC";
             $a1 = oci_parse($con,$query);
             $r1 = oci_execute($a1);
-
-            $query="
-            select sum(totalprice) as sum,extract(month from invoice_date) as month
-                        from invoice 
-                        where postalcode='$id'
-                        group by extract(month from invoice_date)";
-            $a2 = oci_parse($con, $query); 
-            $r2 = oci_execute($a2);
-
-            $query="select sum(totalprice) as negsum 
-            from invoice 
-            where postalcode='$id' 
-            group by extract(month from invoice_date)";
-            $a3 = oci_parse($con, $query); 
-            $r3 = oci_execute($a3);
-
-            $query="select count(invoice_id) as collections ,sum(totalprice) as netsum 
-            from invoice 
-            where postalcode='$id' 
-            group by extract(month from invoice_date)";
-            $a4 = oci_parse($con, $query); 
-            $r4 = oci_execute($a4);
             ?>
             <tr>
                 <th># of Collections</th>
@@ -104,17 +82,41 @@
             </tr>
             <tr id="td2">
             <?php
-             while($row1 = oci_fetch_array($a1, OCI_BOTH+OCI_RETURN_NULLS)){
-                $row2 = oci_fetch_array($a2, OCI_BOTH+OCI_RETURN_NULLS);  
-                $row3 = oci_fetch_array($a3, OCI_BOTH+OCI_RETURN_NULLS);
-                $row4 = oci_fetch_array($a4, OCI_BOTH+OCI_RETURN_NULLS);
+                while($row1 = oci_fetch_array($a1, OCI_BOTH+OCI_RETURN_NULLS)){
+                    $MONTH = $row1["MONTH"];
+                    $gathered="SELECT SUM(Price) AS POSSUM FROM Mail_Invoice minv
+                                INNER JOIN Invoice inv
+                                ON minv.Invoice_ID = inv.Invoice_ID
+                                WHERE Price > 0 AND PostalCode = '$id' AND EXTRACT(year FROM Invoice_Date) = 2019 
+                                AND EXTRACT(month FROM Invoice_Date) = '$MONTH'
+                                ";
+                    $a2 = oci_parse($con, $gathered); 
+                    $r2 = oci_execute($a2);
+
+                    $returned="SELECT SUM(Price) AS NEGSUM FROM Mail_Invoice minv
+                                INNER JOIN Invoice inv
+                                ON minv.Invoice_ID = inv.Invoice_ID
+                                WHERE Price < 0 AND PostalCode = '$id' AND EXTRACT(year FROM Invoice_Date) = 2019 
+                                AND EXTRACT(month FROM Invoice_Date) = '$MONTH'
+                                ";
+                    $a3 = oci_parse($con, $returned); 
+                    $r3 = oci_execute($a3);                
+                    
+                    $NETSUM = 0;
+                    $row2 = oci_fetch_array($a2, OCI_BOTH+OCI_RETURN_NULLS);  
+                    $row3 = oci_fetch_array($a3, OCI_BOTH+OCI_RETURN_NULLS);
+                    if ($row2 != FALSE)
+                        $NETSUM += $row2["POSSUM"];
+
+                    if($row3 != FALSE)
+                        $NETSUM += $row3["NEGSUM"];
             ?>
             <tr>
-                <td id="td2"><?php if ($row1["COLLECTIONS"])echo $row1["COLLECTIONS"];else echo '-';?></td>
-                <td id="td2"><?php if ($row1["MONTH"])echo $row1["MONTH"];else echo '-';?></td>
-                <td id="td2"><?php if ($row2["SUM"] && $row2["SUM"]> 0)echo $row2["SUM"];else echo '-';?></td>
-                <td id="td2"><?php if  ($row3["NEGSUM"]<0)echo $row3["NEGSUM"];else echo '-';?></td>
-                <td id="td2"><?php if ($row4["NETSUM"])echo $row4["NETSUM"];else echo '-';?></td>
+                <td id="td2"><?php if ($row1["COLLECTIONS"])echo $row1["COLLECTIONS"]; else echo '-';?></td>
+                <td id="td2"><?php if ($row1["MONTH"])echo $row1["MONTH"]; else echo '-';?></td>
+                <td id="td2"><?php if ($row2["POSSUM"] && $row2["POSSUM"]> 0)echo $row2["POSSUM"]; else echo '-';?></td>
+                <td id="td2"><?php if ($row3["NEGSUM"]<0)echo $row3["NEGSUM"]; else echo '-';?></td>
+                <td id="td2"><?php echo $NETSUM;?></td>
             </tr>   
            <?php }} ?>
            </table>
