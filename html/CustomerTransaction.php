@@ -21,12 +21,12 @@
         <li><a href="Register.html"><i class="fa fa-fw fa-address-card"></i> Register Customer</a></li>
         <li><a href="Earning.php"><i class="fa fa-fw fa-envelope"></i> Yearly Funds Collection</a></li>
         <li><a href="track-order.php"><i class="fa fa-fw fa-search"></i> Track Order</a></li>
-        <li><a class="active" href="cutomer-transactions.php"><i class="fa fa-fw fa-history"></i> Customer
+        <li><a class="active" href="CustomerTransaction.php"><i class="fa fa-fw fa-history"></i> Customer
                 Transactions</a></li>
     </ul>
     <div id="d06">
         <h1 align="center">Customer Transactions History</h1>
-        <form name="reg" action="cutomer-transactions.php" method="post">
+        <form name="reg" action="CustomerTransaction.php" method="post">
             <table align="center">
                 <hr>
                 <tr>
