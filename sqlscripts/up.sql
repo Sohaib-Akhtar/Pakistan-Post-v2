@@ -18,8 +18,8 @@ Create table Priority(
     Priority_ID numeric(2) not null,
     Name varchar2(30) not null,
     Cost int,
-    Constraint chk_cost check (cost>=0),
-    Constraint PR_pk primary key(Priority_ID)
+    Constraint PR_pk primary key(Priority_ID),
+    Constraint chk_cost check (cost>=0)
 );
 
 Create table Details(
@@ -49,34 +49,12 @@ Create table Province(
     Constraint prov_pk primary key(Province_ID)
 );
 
-Create table Priority(
-    Priority_ID numeric(2) not null,
-    Name varchar2(40) not null,
-    Cost int not null,
-    Constraint Priority_pk primary key(Priority_ID)
-);
-
-
 Create table City(
     City_ID numeric(3) not null,
     Province_ID char(4) not null,
     Name varchar2(20) not null,
     Constraint CTY_pk primary key(City_ID),
     Constraint CTY_fk foreign key(Province_ID) references Province(Province_ID)
-);
-
-Create table PostOffice(
-    PostalCode numeric(5) not null,
-    PostOffice_Name varchar2(40) not null,
-    AccountOffice_ID numeric(6),
-    Manager_ID numeric(10),
-    TelNo numeric(10),
-    Type_ID numeric(2) not null,
-    Province_ID char(4) not null,
-    Constraint PO_pk primary key(PostalCode),
-    Constraint PO_fk foreign key(AccountOffice_ID) references PostOffice(PostalCode),
-    Constraint PO_fk_a foreign key(Manager_ID) references Employee(Emp_ID),
-    Constraint PO_fk_b foreign key(Province_ID) references Province(Province_ID)
 );
 
 Create table Employee(
@@ -90,6 +68,21 @@ Create table Employee(
     Join_Date date,
     Constraint Emp_pk primary key(Emp_ID)
 );
+
+Create table PostOffice(
+    PostalCode numeric(5) not null,
+    PostOffice_Name varchar2(40) not null,
+    AccountOffice_ID numeric(6),
+    Manager_ID numeric(10),
+    TelNo numeric(11),
+    City_ID numeric(3) not null,
+    Type_ID numeric(2) not null,
+    Constraint PO_pk primary key(PostalCode),
+    Constraint PO_fk foreign key(AccountOffice_ID) references PostOffice(PostalCode),
+    Constraint PO_fk_a foreign key(Manager_ID) references Employee(Emp_ID),
+    Constraint PO_fk_b foreign key(City_ID) references City(City_ID)
+);
+
 
 Create table MailDetail(
     MailType_ID char(4) not null,
