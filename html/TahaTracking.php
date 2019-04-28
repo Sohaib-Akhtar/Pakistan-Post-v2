@@ -28,7 +28,7 @@
                 <hr>
                 <tr>
                     <td id="td2">Branch Code:</td>
-                    <td><input type="text" name="brcode" value="" placeholder="Branch Postal Code"  required pattern = "[0-9]{4,5}"></td>
+                    <td><input type="text" name="brcode" value="" placeholder="Branch Postal Code"></td>
                 </tr>
                 <tr>
                     <td id="td2">Enter Year:</td>
@@ -91,58 +91,39 @@
             <?php
                 while($row1 = oci_fetch_array($a1, OCI_BOTH+OCI_RETURN_NULLS)){
                     $MONTH = $row1["MONTH"];
-                    $STAMP_SUMQUERY="SELECT SUM(sinv.TotalPrice) AS POSSUM FROM StampInvoice sinv
-                                INNER JOIN Invoice inv
-                                ON sinv.Invoice_ID = inv.Invoice_ID
-                                WHERE sinv.TotalPrice > 0 AND PostalCode = '$id' AND EXTRACT(year FROM Invoice_Date) = 2019 
-                                AND EXTRACT(month FROM Invoice_Date) = '$MONTH'
-                                ";
-                    $STAMP_SUM_A = oci_parse($con, $STAMP_SUMQUERY); 
-                    $STAMP_SUM_BOOL = oci_execute($STAMP_SUM_A);
-
-                    $SUMQUERY="SELECT SUM(Price) AS POSSUM FROM Mail_Invoice minv
+                    $gathered="SELECT SUM(Price) AS POSSUM FROM Mail_Invoice minv
                                 INNER JOIN Invoice inv
                                 ON minv.Invoice_ID = inv.Invoice_ID
                                 WHERE Price > 0 AND PostalCode = '$id' AND EXTRACT(year FROM Invoice_Date) = 2019 
                                 AND EXTRACT(month FROM Invoice_Date) = '$MONTH'
                                 ";
-                    $SUM_A = oci_parse($con, $SUMQUERY); 
-                    $SUM_BOOL = oci_execute($SUM_A);
+                    $a2 = oci_parse($con, $gathered); 
+                    $r2 = oci_execute($a2);
 
-                    $NEGSUMQUERY="SELECT SUM(Price) AS NEGSUM FROM Mail_Invoice minv
+                    $returned="SELECT SUM(Price) AS NEGSUM FROM Mail_Invoice minv
                                 INNER JOIN Invoice inv
                                 ON minv.Invoice_ID = inv.Invoice_ID
                                 WHERE Price < 0 AND PostalCode = '$id' AND EXTRACT(year FROM Invoice_Date) = 2019 
                                 AND EXTRACT(month FROM Invoice_Date) = '$MONTH'
                                 ";
-                    $NEGSUM_A = oci_parse($con, $NEGSUMQUERY); 
-                    $NEGSUM_BOOL = oci_execute($NEGSUM_A);                
+                    $a3 = oci_parse($con, $returned); 
+                    $r3 = oci_execute($a3);                
                     
                     $NETSUM = 0;
-                    $NETGATHERED = 0;
-                    $SUM = oci_fetch_array($SUM_A, OCI_BOTH+OCI_RETURN_NULLS);  
-                    $NEGSUM = oci_fetch_array($NEGSUM_A, OCI_BOTH+OCI_RETURN_NULLS);
-                    $STAMP_SUM = oci_fetch_array($STAMP_SUM_A, OCI_BOTH+OCI_RETURN_NULLS);
+                    $row2 = oci_fetch_array($a2, OCI_BOTH+OCI_RETURN_NULLS);  
+                    $row3 = oci_fetch_array($a3, OCI_BOTH+OCI_RETURN_NULLS);
+                    if ($row2 != FALSE)
+                        $NETSUM += $row2["POSSUM"];
 
-                    if($STAMP_SUM != FALSE){
-                        $NETSUM += $STAMP_SUM["POSSUM"];
-                        $NETGATHERED += $STAMP_SUM["POSSUM"];
-                    }
-
-                    if ($SUM != FALSE){
-                        $NETSUM += $SUM["POSSUM"];
-                        $NETGATHERED += $SUM["POSSUM"];
-                    }
-
-                    if($NEGSUM != FALSE)
-                        $NETSUM += $NEGSUM["NEGSUM"];
+                    if($row3 != FALSE)
+                        $NETSUM += $row3["NEGSUM"];
             ?>
             <tr>
                 <td id="td2"><?php if ($row1["COLLECTIONS"])echo $row1["COLLECTIONS"]; else echo '-';?></td>
                 <td id="td2"><?php if ($row1["MONTH"])echo $row1["MONTH"]; else echo '-';?></td>
-                <td id="td2"><?php if ($NETGATHERED> 0)echo $NETGATHERED; else echo '-';?></td>
-                <td id="td2"><?php if ($NEGSUM != False && $NEGSUM["NEGSUM"]<0)echo $NEGSUM["NEGSUM"]; else echo '-';?></td>
-                <td id="td2"><?php echo $NETSUM;?></td> 
+                <td id="td2"><?php if ($row2["POSSUM"] && $row2["POSSUM"]> 0)echo $row2["POSSUM"]; else echo '-';?></td>
+                <td id="td2"><?php if ($row3["NEGSUM"]<0)echo $row3["NEGSUM"]; else echo '-';?></td>
+                <td id="td2"><?php echo $NETSUM;?></td>
             </tr>   
            <?php }} ?>
            </table>
