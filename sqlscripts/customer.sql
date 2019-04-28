@@ -7,4 +7,6 @@ INNER JOIN DomesticAddresses da
 ON ca.Address_ID = da.Address_ID
 INNER JOIN City
 ON City.City_ID = da.City_ID
-WHERE c.Customer_ID = 
+WHERE c.Customer_ID = ;
+
+

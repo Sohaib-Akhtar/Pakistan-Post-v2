@@ -57,13 +57,13 @@
                     $query="SELECT Agent_ID FROM Invoice
                         WHERE Invoice_ID = (
                         SELECT Invoice_ID FROM Mail_Invoice
-                        WHERE Barcode = $barcode)
-                    ";
+                        WHERE Barcode = $barcode
+                    )";
                     $a = oci_parse($con, $query); 
                     $r = oci_execute($a);                
-                    $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+                    $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);
                 ?>
-                <td id="td3">Agent Reference #:<?php echo $row[0]?> </td>
+                <td id="td3">Agent Reference #: <?php echo $row["AGENT_ID"];?> </td>
 
             </tr>
             <tr>
@@ -81,7 +81,7 @@
                 $r = oci_execute($a);                
                 $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
              ?>
-                <td id="td3">Origin: <?php echo $row[0]?></td>
+                <td id="td3">Origin: <?php echo $row["ORIGIN"]?></td>
             </tr>
             <tr>
             <?php
@@ -96,7 +96,7 @@
                 $r = oci_execute($a);                
                 $row1 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Destination: <?php echo $row1[0]?></td>
+                <td id="td3">Destination: <?php echo $row1["DESTINATION"]?></td>
             </tr>
             <tr>
             <?php
@@ -109,7 +109,7 @@
                 $r = oci_execute($a);                
                 $row2 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Booking Date: <?php echo $row2[0]?></td>
+                <td id="td3">Booking Date: <?php echo $row2["BOOKDATE"]?></td>
             </tr>
             <tr>
             <?php
@@ -122,7 +122,7 @@
                 $r = oci_execute($a);                
                 $row3 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Shipper: <?php echo $row3[0]?></td>
+                <td id="td3">Shipper: <?php echo $row3["SHIPPER"]?></td>
             </tr>
             <tr>
             <?php
@@ -135,7 +135,7 @@
                 $r = oci_execute($a);                
                 $row4 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Consignee: <?php echo $row4[0]?></td>
+                <td id="td3">Consignee: <?php echo $row4["COSIGNEE"]?></td>
             </tr>
         </table>
     </div>
@@ -157,10 +157,10 @@
                 $r = oci_execute($a);                
                 $row5 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Current Status: <?php if ($row5 != FALSE) echo $row5[0]; else echo '-' ;?></td>
+                <td id="td3">Current Status: <?php if ($row5 != FALSE) echo $row5["DESCRIPTION"]; else echo '-' ;?></td>
             </tr>
             <tr>
-                <td id="td3">Delivered On: <?php if ($row5 != FALSE) echo $row5[1]; else echo '-' ;?></td>
+                <td id="td3">Delivered On: <?php if ($row5 != FALSE) echo $row5["TIMESTAMP"]; else echo '-' ;?></td>
             </tr>
             <tr>
             <?php
@@ -181,7 +181,7 @@
         <table border="true" class="display-table2" align="center">
             <tr>
             <?php
-                 $query="SELECT st.TimeStamp, stype.Description, c.Name FROM StatusTracking st 
+                 $query="SELECT st.TimeStamp AS TRACKDATE, stype.Description AS TRACKSTATUS, c.Name AS CITYNAME FROM StatusTracking st 
                  INNER JOIN StatusType stype
                  ON st.Status_ID = stype.Status_ID
                  INNER JOIN PostOffice po
@@ -200,9 +200,9 @@
             <?php while( $trackrow = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS))
             { ?>
             <tr>
-                <td><?php echo $trackrow[0]?></th>
-                <td><?php echo $trackrow[1]?></th>
-                <td><?php echo $trackrow[2]?></th>
+                <td><?php echo $trackrow["TRACKDATE"]?></th>
+                <td><?php echo $trackrow["TRACKSTATUS"]?></th>
+                <td><?php echo $trackrow["CITYNAME"]?></th>
             </tr>
             <?php }
             ?>
