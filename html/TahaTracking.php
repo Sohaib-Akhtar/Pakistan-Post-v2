@@ -62,13 +62,13 @@
                     $query="SELECT Agent_ID FROM Invoice
                         WHERE Invoice_ID = (
                         SELECT Invoice_ID FROM Mail_Invoice
-                        WHERE Barcode = $barcode
-                    )";
+                        WHERE Barcode = $barcode AND Price >0)
+                    ";
                     $a = oci_parse($con, $query); 
                     $r = oci_execute($a);                
-                    $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);
+                    $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
                 ?>
-                <td id="td3">Agent Reference #: <?php echo $row["AGENT_ID"];?> </td>
+                <td id="td3">Agent Reference #:<?php echo $row[0]?> </td>
 
             </tr>
             <tr>
@@ -80,13 +80,13 @@
                     SELECT PostalCode FROM Invoice
                     WHERE Invoice_ID = (
                         SELECT Invoice_ID FROM Mail_Invoice
-                        WHERE Barcode = $barcode))
+                        WHERE Barcode = $barcode AND Price>0 ))
                 ";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
                 $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
              ?>
-                <td id="td3">Origin: <?php echo $row["ORIGIN"]?></td>
+                <td id="td3">Origin: <?php echo $row[0]?></td>
             </tr>
             <tr>
             <?php
@@ -101,20 +101,20 @@
                 $r = oci_execute($a);                
                 $row1 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Destination: <?php echo $row1["DESTINATION"]?></td>
+                <td id="td3">Destination: <?php echo $row1[0]?></td>
             </tr>
             <tr>
             <?php
                  $query="SELECT Invoice_Date AS BookDate FROM Invoice
                  WHERE Invoice_ID = (
                      SELECT Invoice_ID FROM Mail_Invoice
-                     WHERE Barcode =$barcode
+                     WHERE Barcode =$barcode AND Price >0
                  )";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
                 $row2 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Booking Date: <?php echo $row2["BOOKDATE"]?></td>
+                <td id="td3">Booking Date: <?php echo $row2[0]?></td>
             </tr>
             <tr>
             <?php
@@ -127,7 +127,7 @@
                 $r = oci_execute($a);                
                 $row3 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Shipper: <?php echo $row3["SHIPPER"]?></td>
+                <td id="td3">Shipper: <?php echo $row3[0]?></td>
             </tr>
             <tr>
             <?php
@@ -140,7 +140,7 @@
                 $r = oci_execute($a);                
                 $row4 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Consignee: <?php echo $row4["COSIGNEE"]?></td>
+                <td id="td3">Consignee: <?php echo $row4[0]?></td>
             </tr>
         </table>
     </div>
@@ -161,11 +161,21 @@
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
                 $row5 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+            
+                $query="SELECT Refund from mail where barcode=$barcode";
+                $a1 = oci_parse($con, $query); 
+                $r1 = oci_execute($a1); 
+                $refundcheck = oci_fetch_array($a1, OCI_BOTH+OCI_RETURN_NULLS);
             ?>
-                <td id="td3">Current Status: <?php if ($row5 != FALSE) echo $row5["DESCRIPTION"]; else echo '-' ;?></td>
+               <?php if($refundcheck[0]=="false"){?>
+                <td id="td3">Current Status: <?php if ($row5 != FALSE) echo $row5[0]; else echo '-' ;?></td>
+               <?php }else
+               {?>
+               <td id="td3">Current Status: <?php  echo 'REFUNDED' ;?></td>
+           <?php } ?>
             </tr>
             <tr>
-                <td id="td3">Delivered On: <?php if ($row5 != FALSE) echo $row5["TIMESTAMP"]; else echo '-' ;?></td>
+                <td id="td3">Delivered On: <?php if ($row5 != FALSE) echo $row5[1]; else echo '-' ;?></td>
             </tr>
             <tr>
             <?php
@@ -176,7 +186,7 @@
                     $r = oci_execute($a);                
                     $row6 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
                 ?>
-                <td id="td3">Signed By: <?php echo $row6[0]; ?></td>
+                <td id="td3">Signed By: <?php if ($refundcheck[0] == "false") echo $row6[0]; else echo '-' ;?></td>
             </tr>
         </table>
     </div>
@@ -186,19 +196,22 @@
         <table border="true" class="display-table2" align="center">
             <tr>
             <?php
-                 $query="SELECT st.TimeStamp AS TRACKDATE, stype.Description AS TRACKSTATUS, c.Name AS CITYNAME FROM StatusTracking st 
-                    INNER JOIN StatusType stype
-                    ON st.Status_ID = stype.Status_ID
-                    INNER JOIN PostOffice po
-                    ON po.PostalCode = st.PostalCode
-                    INNER JOIN City c
-                    ON c.City_ID = po.City_ID
-                    WHERE st.Barcode = $barcode
-                    ORDER BY SerialNo desc
-                 ";
+                 
+                 
+
+                 $query="SELECT st.TimeStamp, stype.Description, c.Name FROM StatusTracking st 
+                 INNER JOIN StatusType stype
+                 ON st.Status_ID = stype.Status_ID
+                 INNER JOIN PostOffice po
+                 ON po.PostalCode = st.PostalCode
+                 INNER JOIN City c
+                 ON c.City_ID = po.City_ID
+                 WHERE st.Barcode = $barcode 
+                 ORDER BY SerialNo desc";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                  
-            ?>
+            if($refundcheck[0]=="false")
+            {?>
                 <th>Date Time</th>
                 <th>Status</th>
                 <th>Location</th>
@@ -206,18 +219,20 @@
             <?php while( $trackrow = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS))
             { ?>
             <tr>
-                <td><?php echo $trackrow["TRACKDATE"]?></th>
-                <td><?php echo $trackrow["TRACKSTATUS"]?></th>
-                <td><?php echo $trackrow["CITYNAME"]?></th>
+                <td><?php echo $trackrow[0]?></th>
+                <td><?php echo $trackrow[1]?></th>
+                <td><?php echo $trackrow[2]?></th>
             </tr>
-            <?php }
-            ?>
+            <?php } ?>
+           <?php } ?>
         </table>
     </div>
     <br>
     <br>
     <br>
-    <?php } ?>
+    <?php 
+    } 
+   ?>
     <div class="footer">
         <img src="../images/Favicon.ico" style="float:left; height: 90%">
         <div class="footer-elements">

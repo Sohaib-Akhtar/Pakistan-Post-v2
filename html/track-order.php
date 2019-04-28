@@ -57,7 +57,7 @@
                     $query="SELECT Agent_ID FROM Invoice
                         WHERE Invoice_ID = (
                         SELECT Invoice_ID FROM Mail_Invoice
-                        WHERE Barcode = $barcode)
+                        WHERE Barcode = $barcode AND Price >0)
                     ";
                     $a = oci_parse($con, $query); 
                     $r = oci_execute($a);                
@@ -75,7 +75,7 @@
                     SELECT PostalCode FROM Invoice
                     WHERE Invoice_ID = (
                         SELECT Invoice_ID FROM Mail_Invoice
-                        WHERE Barcode = $barcode))
+                        WHERE Barcode = $barcode AND Price>0 ))
                 ";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
@@ -103,7 +103,7 @@
                  $query="SELECT Invoice_Date AS BookDate FROM Invoice
                  WHERE Invoice_ID = (
                      SELECT Invoice_ID FROM Mail_Invoice
-                     WHERE Barcode =$barcode
+                     WHERE Barcode =$barcode AND Price >0
                  )";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
@@ -181,7 +181,7 @@
                     $r = oci_execute($a);                
                     $row6 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
                 ?>
-                <td id="td3">Signed By: <?php echo $row6[0]; ?></td>
+                <td id="td3">Signed By: <?php if ($refundcheck[0] == "false") echo $row6[0]; else echo '-' ;?></td>
             </tr>
         </table>
     </div>
@@ -201,7 +201,7 @@
                  ON po.PostalCode = st.PostalCode
                  INNER JOIN City c
                  ON c.City_ID = po.City_ID
-                 WHERE st.Barcode = $barcode
+                 WHERE st.Barcode = $barcode 
                  ORDER BY SerialNo desc";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                  
@@ -218,11 +218,8 @@
                 <td><?php echo $trackrow[1]?></th>
                 <td><?php echo $trackrow[2]?></th>
             </tr>
-            <?php }
-            ?>
-           <?php }
-            else{
-}?>
+            <?php } ?>
+           <?php } ?>
         </table>
     </div>
     <br>
