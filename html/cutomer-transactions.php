@@ -176,7 +176,7 @@
                         ON ca.Address_ID = da.Address_ID
                         INNER JOIN City ct
                         ON ct.City_ID = da.City_ID
-                        WHERE cinv.Customer_ID = $id and minv.Price>0
+                        WHERE c.Customer_ID = $id and minv.Price>0
                     "; 
                     $parse = oci_parse($con, $query); 
                     $valid = oci_execute($parse);
