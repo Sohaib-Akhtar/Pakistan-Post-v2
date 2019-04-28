@@ -187,14 +187,15 @@
             <tr>
             <?php
                  $query="SELECT st.TimeStamp AS TRACKDATE, stype.Description AS TRACKSTATUS, c.Name AS CITYNAME FROM StatusTracking st 
-                 INNER JOIN StatusType stype
-                 ON st.Status_ID = stype.Status_ID
-                 INNER JOIN PostOffice po
-                 ON po.PostalCode = st.PostalCode
-                 INNER JOIN City c
-                 ON c.City_ID = po.City_ID
-                 WHERE st.Barcode = $barcode
-                 ORDER BY SerialNo desc";
+                    INNER JOIN StatusType stype
+                    ON st.Status_ID = stype.Status_ID
+                    INNER JOIN PostOffice po
+                    ON po.PostalCode = st.PostalCode
+                    INNER JOIN City c
+                    ON c.City_ID = po.City_ID
+                    WHERE st.Barcode = $barcode
+                    ORDER BY SerialNo desc
+                 ";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                  
             ?>

@@ -60,6 +60,8 @@
                             ))"; 
                 $db_user = "scott"; 
                 $db_pass = "tiger";
+                $is_id = FALSE;
+                $id = 0;
                 $con = oci_connect($db_user,$db_pass, $db_sid);
                 if(isset($_POST['View']))
                 {  
@@ -119,8 +121,10 @@
                     $parse = oci_parse($con, $query); 
                     $valid = oci_execute($parse);
                     $row = oci_fetch_array($parse, OCI_BOTH+OCI_RETURN_NULLS);
-                    if(!$is_id)
+                    if(!$is_id){
                         $id = $row["CUSTID"];
+                        $is_id = TRUE;
+                    }
             ?>
             <tr>
                 <td id="td4">Customer ID: <?php if(!is_null($row["CUSTID"])) echo $row["CUSTID"]; else echo '-';?></td>
@@ -140,6 +144,7 @@
             <tr>
                 <td id="td4">CNIC: <?php if(!is_null($row["CNIC"])) echo $row["CNIC"]; else echo '-';?></td>
             </tr>
+            <?php } ?>
         </table>
     </div>
     <div id="div-4">
@@ -156,6 +161,8 @@
                 <th>Date</th>
             </tr>
             <?php
+                if($is_id)
+                {
                 $query="SELECT minv.Barcode AS Tracking, Type_Name AS Description, m.Qty AS Quantity, FirstName || ' '||LastName AS RecipientName, StreetAddress, ct.Name AS CUSTNAME, Invoice_Date
                         FROM Customer c
                         INNER JOIN Customer_Invoice cinv
@@ -208,11 +215,12 @@
                         <td><?php if( !is_null($status_row["DESCRIPTION"]))echo $status_row["DESCRIPTION"];else echo '-';?></td>
                         <td><?php echo $row["INVOICE_DATE"];?></td>
                     </tr>
-            <?php } ?>
+            <?php } 
+            }?>
 
         </table>
+        
     </div>
-    <?php } ?>
     <br>
     <br>
     <br>
