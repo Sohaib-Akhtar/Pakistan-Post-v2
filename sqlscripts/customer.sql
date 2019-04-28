@@ -22,7 +22,7 @@ INNER JOIN Mail m
 ON m.Barcode = minv.Barcode
 INNER JOIN Details d
 ON d.Details_ID = m.R_Detail_ID
-INNER JOIN ContentType ctype
+LEFT JOIN ContentType ctype
 ON ctype.ContentType_ID = m.ContentType_ID
 INNER JOIN Customer_Addresses ca
 ON c.Customer_ID = ca.Customer_ID
@@ -30,4 +30,4 @@ INNER JOIN DomesticAddresses da
 ON ca.Address_ID = da.Address_ID
 INNER JOIN City ct
 ON ct.City_ID = da.City_ID
-WHERE c.Customer_ID = 10005 and minv.Price>0;
+WHERE c.Customer_ID = 10001 and minv.Price>0;

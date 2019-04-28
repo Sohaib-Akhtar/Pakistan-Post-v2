@@ -580,7 +580,8 @@ th{
     border-radius: 35px;
     color: white;
     margin-left: 21vw;
-    font-size: 1.5vw;
+    text-align: center;
+    font-size: 1.2vw;
 }
 #h08{
     background-color: #fc1313;

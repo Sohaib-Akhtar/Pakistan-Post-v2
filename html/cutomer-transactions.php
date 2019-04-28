@@ -168,7 +168,7 @@
                         ON m.Barcode = minv.Barcode
                         INNER JOIN Details d
                         ON d.Details_ID = m.R_Detail_ID
-                        INNER JOIN ContentType ctype
+                        LEFT JOIN ContentType ctype
                         ON ctype.ContentType_ID = m.ContentType_ID
                         INNER JOIN Customer_Addresses ca
                         ON c.Customer_ID = ca.Customer_ID
@@ -200,7 +200,7 @@
                         $status_row= oci_fetch_array($status_parse, OCI_BOTH+OCI_RETURN_NULLS);
                         ?>
                         <td><?php echo $row["TRACKING"];?></td>
-                        <td><?php echo $row["DESCRIPTION"];?></td>
+                        <td><?php if(!is_null($row["DESCRIPTION"])) echo $row["DESCRIPTION"]; echo '-';?></td>
                         <td><?php echo $row["QUANTITY"];?></td>
                         <td><?php echo $row["RECIPIENTNAME"];?></td>
                         <td><?php echo $row["STREETADDRESS"];?></td>
