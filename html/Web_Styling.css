@@ -540,8 +540,9 @@ th{
     width: 9.5vw;
     border-radius: 35px;
     color: white;
-    margin-left: 24vw;
-    font-size: 1.5vw;
+    margin-left: 25vw;
+    text-align: center;
+    font-size: 1.2vw;
 }
 #td3 {
     padding-left: 3vw;
