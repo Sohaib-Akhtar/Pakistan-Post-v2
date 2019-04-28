@@ -31,7 +31,7 @@
                 <hr>
                 <tr>
                     <td id="td2">Customer ID:</td>
-                    <td><input type="text" name="CustID" value="" placeholder="E.g. 10000" required required pattern = "[0-9]{5}"></td>
+                    <td><input type="text" name="CustID" value="" placeholder="E.g. 10000"  required pattern = "[0-9]{5}"></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -39,7 +39,7 @@
                 </tr>
                 <tr>
                     <td id="td2">CNIC:</td>
-                    <td><input type="text" name="CNIC" value="" placeholder="E.g. 3630285346195" required required pattern = "[0-9]{13}"></td>
+                    <td><input type="text" name="CNIC" value="" placeholder="E.g. 3630285346195" pattern = "[0-9]{13}"></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -65,8 +65,8 @@
                 {  
                     $is_cnic= FALSE;
                     $is_id= FALSE;
-                    $id = $_POST["CustID"]
-                    $cnic = $_POST["CNIC"]
+                    $id = $_POST["CustID"];
+                    $cnic = $_POST["CNIC"];
                     if(!empty($id))
                         $is_id = TRUE;
 
@@ -75,53 +75,71 @@
 
                     if($is_cnic == TRUE && $is_id == TRUE)
                     {
-                        $q_cnic = "SELECT Cust_ID FROM Customer
-                        WHERE CNIC = $cnic
-                        ";
                         $q_id = "SELECT CNIC FROM Customer
-                        WHERE Cust_ID = $id
+                            WHERE Customer_ID = $id
                         ";
-                        $p_cnic = oci_parse($con, $q_cnic); 
-                        $v_cnic = oci_execute($p_cnic);                
-                        $row_cnic = oci_fetch_array($p_cnic, OCI_BOTH+OCI_RETURN_NULLS);
 
                         $p_id = oci_parse($con, $q_id); 
                         $v_id = oci_execute($p_id);                
                         $row_id = oci_fetch_array($p_id, OCI_BOTH+OCI_RETURN_NULLS);
-                        if()
+                        if($row_id != FALSE)
+                        {
+                            if ($row_id["CNIC"] != $cnic)
+                                $is_cnic = FALSE;
+                            else
+                                $is_id = FALSE;
+                        }
 
                     }
-                    
-
-                    SELECT FirstName || LastName AS CustName, c.Customer_ID, StreetAddress, City.Name, MobileNo, CNIC FROM Customer c
-                    INNER JOIN Details d
-                    ON c.Details_ID = d.Details_ID
-                    INNER JOIN Customer_Addresses ca
-                    ON c.Customer_ID = ca.Customer_ID
-                    INNER JOIN DomesticAddresses da
-                    ON ca.Address_ID = da.Address_ID
-                    INNER JOIN City
-                    ON City.City_ID = da.City_ID
-                    WHERE c.Customer_ID = 
+                    $query = "";
+                    if($is_id == TRUE){
+                        $query="SELECT FirstName || ' ' ||LastName AS CustName, c.Customer_ID AS CUSTID, StreetAddress, City.Name AS CITYNAME, MobileNo, CNIC FROM Customer c
+                            INNER JOIN Details d
+                            ON c.Details_ID = d.Details_ID
+                            INNER JOIN Customer_Addresses ca
+                            ON c.Customer_ID = ca.Customer_ID
+                            INNER JOIN DomesticAddresses da
+                            ON ca.Address_ID = da.Address_ID
+                            INNER JOIN City
+                            ON City.City_ID = da.City_ID
+                            WHERE c.Customer_ID = $id";
+                    }
+                    elseif($is_cnic == TRUE){
+                        $query="SELECT FirstName ||' ' ||LastName AS CustName, c.Customer_ID AS CUSTID, StreetAddress, City.Name AS CITYNAME, MobileNo, CNIC FROM Customer c
+                            INNER JOIN Details d
+                            ON c.Details_ID = d.Details_ID
+                            INNER JOIN Customer_Addresses ca
+                            ON c.Customer_ID = ca.Customer_ID
+                            INNER JOIN DomesticAddresses da
+                            ON ca.Address_ID = da.Address_ID
+                            INNER JOIN City
+                            ON City.City_ID = da.City_ID
+                            WHERE CNIC = $cnic";
+                    }
+                    $parse = oci_parse($con, $query); 
+                    $valid = oci_execute($parse);
+                    $row = oci_fetch_array($parse, OCI_BOTH+OCI_RETURN_NULLS);
+                
             ?>
             <tr>
-                <td id="td4">Customer ID:</td>
+                <td id="td4">Customer ID: <?php if(!is_null($row["CUSTID"])) echo $row["CUSTID"]; else echo '-';?></td>
             </tr>
             <tr>
-                <td id="td4">Customer Name:</td>
+                <td id="td4">Customer Name: <?php if(!is_null($row["CUSTNAME"])) echo $row["CUSTNAME"]; else echo '-';?></td>
             </tr>
             <tr>
-                <td id="td4">Address:</td>
+                <td id="td4">Address: <?php if(!is_null($row["STREETADDRESS"])) echo $row["STREETADDRESS"]; else echo '-';?></td>
             </tr>
             <tr>
-                <td id="td4">City:</td>
+                <td id="td4">City: <?php if(!is_null($row["CITYNAME"])) echo $row["CITYNAME"]; else echo '-';?></td>
             </tr>
             <tr>
-                <td id="td4">Mobile#:</td>
+                <td id="td4">Mobile#: <?php if(!is_null($row["MOBILENO"])) echo $row["MOBILENO"]; else echo '-';?></td>
             </tr>
             <tr>
-                <td id="td4">CNIC:</td>
+                <td id="td4">CNIC: <?php if(!is_null($row["CNIC"])) echo $row["CNIC"]; else echo '-';?></td>
             </tr>
+                <?php }?>
         </table>
     </div>
     <div id="div-4">
