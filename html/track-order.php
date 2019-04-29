@@ -53,19 +53,30 @@
         <h2 id="h04">Shipment Details</h2>
         <table>
             <tr>
-                <td id="td3">Agent Reference #:</td>
+                <?php
+                    $query="SELECT Agent_ID FROM Invoice
+                        WHERE Invoice_ID = (
+                        SELECT Invoice_ID FROM Mail_Invoice
+                        WHERE Barcode = $barcode)
+                    ";
+                    $a = oci_parse($con, $query); 
+                    $r = oci_execute($a);                
+                    $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+                ?>
+                <td id="td3">Agent Reference #:<?php echo $row[0]?> </td>
+
             </tr>
             <tr>
                 <?php
-                 $query="SELECT Name AS Origin FROM PostOffice po
-                 INNER JOIN City c
-                 ON c.City_ID = po.City_ID
-                 WHERE PostalCode = (
-                     SELECT PostalCode FROM Invoice
-                     WHERE Invoice_ID = (
-                         SELECT Invoice_ID FROM Mail_Invoice
-                         WHERE Barcode = $barcode))
-                 ";
+                $query="SELECT Name AS Origin FROM PostOffice po
+                INNER JOIN City c
+                ON c.City_ID = po.City_ID
+                WHERE PostalCode = (
+                    SELECT PostalCode FROM Invoice
+                    WHERE Invoice_ID = (
+                        SELECT Invoice_ID FROM Mail_Invoice
+                        WHERE Barcode = $barcode))
+                ";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
                 $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
@@ -74,12 +85,13 @@
             </tr>
             <tr>
             <?php
-                 $query="SELECT Name AS Destination FROM City
-                 WHERE City_ID = (
-                SELECT City_ID FROM DomesticAddresses
-                WHERE Address_ID = (
-                 SELECT R_Address_ID FROM Mail
-                WHERE Barcode = $barcode))";
+                $query="SELECT Name AS Destination FROM City
+                    WHERE City_ID = (
+                    SELECT City_ID FROM DomesticAddresses
+                    WHERE Address_ID = (
+                    SELECT R_Address_ID FROM Mail
+                    WHERE Barcode = $barcode))
+                ";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
                 $row1 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
@@ -117,7 +129,7 @@
                  $query="SELECT FirstName || ' ' || LastName AS Cosignee FROM Details
                  WHERE Details_ID = (
                      SELECT R_Detail_ID FROM Mail
-                     WHERE Barcode  =$barcode
+                     WHERE Barcode  = $barcode
                  )";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
@@ -132,24 +144,34 @@
         <table>
             <tr>
             <?php
-                 $query="SELECT  Description, TimeStamp FROM
-                 (
-                     SELECT Description, TimeStamp, row_number() over (order by SerialNo desc) as rn FROM StatusTracking st
-                     INNER JOIN StatusType s
-                     ON st.Status_ID = s.Status_ID
-                 )
-                 where rn = 1;";
+                $query="SELECT  Description, TimeStamp FROM
+                    (
+                        SELECT Description, TimeStamp, row_number() OVER (ORDER BY SerialNo DESC) AS rn FROM StatusTracking st
+                        INNER JOIN StatusType s
+                        ON st.Status_ID = s.Status_ID
+                        WHERE Barcode = $barcode
+                    )
+                    WHERE rn = 1
+                ";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
-                $row4 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+                $row5 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
             ?>
-                <td id="td3">Current Status:</td>
+                <td id="td3">Current Status: <?php if ($row5 != FALSE) echo $row5[0]; else echo '-' ;?></td>
             </tr>
             <tr>
-                <td id="td3">Delivered On:</td>
+                <td id="td3">Delivered On: <?php if ($row5 != FALSE) echo $row5[1]; else echo '-' ;?></td>
             </tr>
             <tr>
-                <td id="td3">Signed By:</td>
+            <?php
+                $query="SELECT Signature FROM Mail_Invoice
+                        WHERE Barcode = $barcode
+                    ";
+                    $a = oci_parse($con, $query); 
+                    $r = oci_execute($a);                
+                    $row6 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+                ?>
+                <td id="td3">Signed By: <?php echo $row6[0]; ?></td>
             </tr>
         </table>
     </div>
@@ -166,7 +188,7 @@
                  ON po.PostalCode = st.PostalCode
                  INNER JOIN City c
                  ON c.City_ID = po.City_ID
-                 WHERE st.Barcode =$barcode
+                 WHERE st.Barcode = $barcode
                  ORDER BY SerialNo desc";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                  

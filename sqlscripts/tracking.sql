@@ -74,8 +74,9 @@
 */
 SELECT  Description, TimeStamp FROM
 (
-    SELECT Description, TimeStamp, row_number() over (order by SerialNo desc) as rn FROM StatusTracking st
+    SELECT Description, TimeStamp, row_number() OVER (ORDER BY SerialNo DESC) AS rn FROM StatusTracking st
     INNER JOIN StatusType s
     ON st.Status_ID = s.Status_ID
+    WHERE Barcode = 40001923
 )
-where rn = 1;
+WHERE rn = 1;
