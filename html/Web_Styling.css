@@ -613,3 +613,11 @@ th{
     text-align: left;
     padding-left: 2vw;
 }
+
+.hide{
+    display: none;
+}
+
+.unhide{
+    display: block;
+}

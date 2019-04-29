@@ -39,6 +39,16 @@
             </form>        
         <hr>
     </div>
+    <div id="d06" name = "CustomerDiv">
+        <form class = "unhide" onsubmit="verify_customer(document.getElementById('CustomerID').value); return false"  id="Customer Form" >
+            <table id="input_table" class="display-table7 " align="center">
+                <tr>
+                    <input id = "CustomerID" type="text" placeholder="Customer ID" required pattern = "[0-9]{5}">
+                    <input class="registerbtn2" type="submit" name="Display" value="Select">
+                </tr>
+            </table>
+        </form>
+    </div>
     <div id="d06">
         <table id = "results" class = "display-table2" align="center">
             <tr>
@@ -70,31 +80,56 @@
         </div>
     </div>
 </body>
-<script>
-function showInfo(str) {
-    if (str == "") {
-        document.getElementById("results").innerHTML = "";
-        return;
-    } else {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
+<script>    
+    function verify_customer(str) {
+            console.log(str);
+            var form = document.getElementById('Customer Form');
             xmlhttp = new XMLHttpRequest();
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                console.log("Query sent");
-                if(this.responseText.length > 0)
-                {
-                    var table = document.getElementById("results");
-                    var row = table.insertRow(table.rows.length);
-                    row.innerHTML = this.responseText;
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    if(this.responseText != null ){
+                        form.classList.remove('unhide');
+                        form.classList.add('hide');
+                        console.log("Hidden");
+                        document.getElementsByName('CustomerDiv')[0].innerHTML = "<h1 id = '01'  align='center'> Hello! " + this.responseText + "</h1>";
+                    }
+                    else {
+                        form.classList.remove('hide');
+                        form.classList.add('unhide');
+                        console.log("Shown");
+                    }
                 }
-            }
-        };
-        xmlhttp.open("GET","Invoice.php?q="+str,true);
-        xmlhttp.send();
+            };
+            xmlhttp.open("GET","Verify.php?q="+str,true);
+            xmlhttp.send();
     }
-}
+    
+    function showInfo(str, num) {
+        if (str == "") {
+            document.getElementById("results").innerHTML = "";
+            return;
+        } else {
+            if (window.XMLHttpRequest) {
+                // code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("Query sent");
+                    if(this.responseText.length > 0)
+                    {
+                        var table = document.getElementById("results");
+                        var row = table.insertRow(table.rows.length);
+                        row.innerHTML = this.responseText;
+                        document.getElementById('testform').reset();
+                    }
+                }
+            };
+            xmlhttp.open("GET","Invoice.php?q="+str,true);
+            xmlhttp.send();
+        }
+    }
 </script>
 
 </html>
