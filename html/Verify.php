@@ -7,8 +7,8 @@
                     (SERVER = DEDICATED)
                     (SERVICE_NAME = TahaFiroz)
                 ))"; 
-        $db_user = "scott"; 
-        $db_pass = "tiger";
+        $db_user = "bilal"; 
+        $db_pass = "bilal1";
         $con = oci_connect($db_user,$db_pass, $db_sid);
 
         $query= "SELECT FirstName || ' ' || LastName AS Name FROM Customer c

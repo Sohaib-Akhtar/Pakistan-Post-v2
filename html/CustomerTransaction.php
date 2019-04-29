@@ -18,7 +18,7 @@
     </div>
     <ul id="ul3">
         <li><a href="main.html"><i class="fa fa-fw fa-home"></i> Home</a></li>
-        <li><a href="Register.html"><i class="fa fa-fw fa-address-card"></i> Register Customer</a></li>
+        <li><a href="Test.php"><i class="fa fa-fw fa-history"></i>Add Mail/Parcel</a></li>
         <li><a href="Earning.php"><i class="fa fa-fw fa-envelope"></i> Yearly Funds Collection</a></li>
         <li><a href="track-order.php"><i class="fa fa-fw fa-search"></i> Track Order</a></li>
         <li><a class="active" href="CustomerTransaction.php"><i class="fa fa-fw fa-history"></i> Customer
@@ -56,8 +56,8 @@
                                 (SERVER = DEDICATED)
                                 (SERVICE_NAME = TahaFiroz)
                             ))"; 
-                $db_user = "scott"; 
-                $db_pass = "1234";
+                $db_user = "bilal1"; 
+                $db_pass = "bilal";
                 $is_id = FALSE;
                 $id = 0;
                 $con = oci_connect($db_user,$db_pass);

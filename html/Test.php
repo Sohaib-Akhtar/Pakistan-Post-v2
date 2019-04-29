@@ -18,7 +18,7 @@
     </div>
     <ul id="ul3">
         <li><a href="main.html"><i class="fa fa-fw fa-home"></i> Home</a></li>
-        <li><a class="active" href="Test.html"><i class="fa fa-fw fa-address-card"></i> Add Mail/Parcel</a></li>
+        <li><a class="active" href="Test.php"><i class="fa fa-fw fa-address-card"></i> Add Mail/Parcel</a></li>
         <li><a href="Earning.php"><i class="fa fa-fw fa-envelope"></i> Yearly Funds Collection</a></li>
         <li><a href="track-order.php"><i class="fa fa-fw fa-search"></i> Track Order</a></li>
         <li><a href="CustomerTransaction.php"><i class="fa fa-fw fa-history"></i> Customer Transactions</a></li>
@@ -50,11 +50,11 @@
                     <td id="td2">City:</td>
                     <td id="td8">
                         <div class="custom-select">
-                        <select>
+                        <select id="city">
                         <?php
-                            $db_user = "scott"; 
-                            $db_pass = "1234";
-                            $con = oci_connect($db_user,$db_pass);
+                            $db_user = "bilal1"; 
+                            $db_pass = "bilal";
+                            $con = oci_connect($db_user,$db_pass);                        
                             $query1="select city_id,name from city";
                             $a = oci_parse($con, $query1); 
                             $r = oci_execute($a);
@@ -87,9 +87,9 @@
                     </tr>
                     <tr>
                         <td id="td2">MobileNo:</td>
-                        <td><input type="text" name="add" value="" placeholder="Your Phone#"></td>
+                        <td><input type="text" name="mobileno" value="" placeholder="Your Phone#"></td>
                         <td id="td8">TelNo:</td>
-                        <td><input type="text" name="email" value="" placeholder="Your E-mail"></td>
+                        <td><input type="text" name="telno" value="" placeholder="Your E-mail"></td>
                     </tr>
                     <tr>
                         <td id="td2">Address:</td>
@@ -106,12 +106,9 @@
                         <td id="td2">Content:</td>
                         <td id="td8">
                             <div class="custom-select">
-                                <select>
+                                <select id="content">
                                     <?php
-                                    $db_user = "scott"; 
-                                    $db_pass = "1234";
-                                     $con = oci_connect($db_user,$db_pass);
-                                     $query1="select contenttype_id,type_name from contenttype";
+                                    $query1="select contenttype_id,type_name from contenttype";
                                      $a = oci_parse($con, $query1); 
                                      $r = oci_execute($a);
                                      while($row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS))  
@@ -126,11 +123,8 @@
                         <td id="td2">Priority:</td>
                         <td id="td8">
                             <div class="custom-select">
-                                <select>
+                                <select id="priority">
                                     <?php
-                                    $db_user = "scott"; 
-                                    $db_pass = "1234";
-                                     $con = oci_connect($db_user,$db_pass);
                                      $query1="select priority_id,name from priority";
                                      $a = oci_parse($con, $query1); 
                                      $r = oci_execute($a);
@@ -148,11 +142,8 @@
                         <td id="td2">MailType:</td>
                         <td id="td8">
                             <div class="custom-select">
-                                <select>
+                                <select id="mailtype">
                                     <?php
-                                    $db_user = "scott"; 
-                                    $db_pass = "1234";
-                                     $con = oci_connect($db_user,$db_pass);
                                      $query1="select mailtype_id,type_name from mailtype";
                                      $a = oci_parse($con, $query1); 
                                      $r = oci_execute($a);
@@ -166,11 +157,11 @@
                             </div>
                         </td>
                         <td id="td2">Weight:</td>
-                        <td id="td8"><input type="text" name="email" value="" placeholder="Your Parcel Weight"></td>
+                        <td id="td8"><input type="text" name="weight" value="" placeholder="Your Parcel Weight"></td>
                     </tr>
                     <tr>
                         <td id="td2">Worth Of Parcel:</td>
-                        <td id="td8"><input type="text" name="email" value="" placeholder="Your Parcel Worth"></td>
+                        <td id="td8"><input type="text" name="worth" value="" placeholder="Your Parcel Worth"></td>
                         <td id="td2">Insurance:</td>
                         <td id="td8">
                             <div class="custom-select">
@@ -192,7 +183,7 @@
                             </div>
                         </td>
                         <td id="td2">Quantity:</td>
-                        <td id="td8"><input type="text" name="email" value="" placeholder="Your Quantity Here"></td>
+                        <td id="td8"><input type="text" name="quantity" value="" placeholder="Your Quantity Here"></td>
                     </tr>
             </table>
             <input class="registerbtn3" type="submit" name="register" value="register">

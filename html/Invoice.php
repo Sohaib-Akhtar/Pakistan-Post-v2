@@ -7,8 +7,8 @@
                     (SERVER = DEDICATED)
                     (SERVICE_NAME = TahaFiroz)
                 ))"; 
-        $db_user = "scott"; 
-        $db_pass = "tiger";
+        $db_user = "bilal1"; 
+        $db_pass = "bilal";
         $con = oci_connect($db_user,$db_pass, $db_sid);
 
         $query="SELECT Type_Name AS Description, m.Qty AS Quantity, FirstName || ' '||LastName AS RecipientName, StreetAddress, Invoice_Date
