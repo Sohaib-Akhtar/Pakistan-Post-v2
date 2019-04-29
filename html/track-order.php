@@ -132,11 +132,13 @@
         <table>
             <tr>
             <?php
-                 $query="SELECT FirstName || ' ' || LastName AS Cosignee FROM Details
-                 WHERE Details_ID = (
-                     SELECT R_Detail_ID FROM Mail
-                     WHERE Barcode  =$barcode
-                 )";
+                 $query="SELECT  Description, TimeStamp FROM
+                 (
+                     SELECT Description, TimeStamp, row_number() over (order by SerialNo desc) as rn FROM StatusTracking st
+                     INNER JOIN StatusType s
+                     ON st.Status_ID = s.Status_ID
+                 )
+                 where rn = 1;";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
                 $row4 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
@@ -164,7 +166,7 @@
                  ON po.PostalCode = st.PostalCode
                  INNER JOIN City c
                  ON c.City_ID = po.City_ID
-                 WHERE st.Barcode = 40001924
+                 WHERE st.Barcode =$barcode
                  ORDER BY SerialNo desc";
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                  
