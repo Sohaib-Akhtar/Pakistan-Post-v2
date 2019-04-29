@@ -448,8 +448,14 @@ label {
     margin-left: 0.2vw;
 }
 
+.display-table7{
+    border:none;
+    width: 30vw;
+}
+
 .display-table{
     border:10px;
+    width: 30vw;
     border-collapse: collapse;
     padding: 4px;
     border-color: rgb(255, 49, 49);
