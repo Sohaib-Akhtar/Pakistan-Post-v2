@@ -69,24 +69,65 @@
                 $a = oci_parse($con, $query); 
                 $r = oci_execute($a);                
                 $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
-      ?>
+             ?>
                 <td id="td3">Origin: <?php echo $row[0]?></td>
             </tr>
             <tr>
-                <td id="td3">Destination:</td>
+            <?php
+                 $query="SELECT Name AS Destination FROM City
+                 WHERE City_ID = (
+                SELECT City_ID FROM DomesticAddresses
+                WHERE Address_ID = (
+                 SELECT R_Address_ID FROM Mail
+                WHERE Barcode = $barcode))";
+                $a = oci_parse($con, $query); 
+                $r = oci_execute($a);                
+                $row1 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+            ?>
+                <td id="td3">Destination: <?php echo $row1[0]?></td>
             </tr>
             <tr>
-                <td id="td3">Booking Date:</td>
+            <?php
+                 $query="SELECT Invoice_Date AS BookDate FROM Invoice
+                 WHERE Invoice_ID = (
+                     SELECT Invoice_ID FROM Mail_Invoice
+                     WHERE Barcode =$barcode
+                 )";
+                $a = oci_parse($con, $query); 
+                $r = oci_execute($a);                
+                $row2 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+            ?>
+                <td id="td3">Booking Date: <?php echo $row2[0]?></td>
             </tr>
             <tr>
-                <td id="td3">Shipper:</td>
+            <?php
+                 $query="SELECT FirstName || ' ' || LastName AS Shipper FROM Details
+                 WHERE Details_ID = (
+                     SELECT S_Detail_ID FROM Mail
+                     WHERE Barcode =$barcode
+                 )";
+                $a = oci_parse($con, $query); 
+                $r = oci_execute($a);                
+                $row3 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+            ?>
+                <td id="td3">Shipper: <?php echo $row3[0]?></td>
             </tr>
             <tr>
-                <td id="td3">Consignee:</td>
+            <?php
+                 $query="SELECT FirstName || ' ' || LastName AS Cosignee FROM Details
+                 WHERE Details_ID = (
+                     SELECT R_Detail_ID FROM Mail
+                     WHERE Barcode  =$barcode
+                 )";
+                $a = oci_parse($con, $query); 
+                $r = oci_execute($a);                
+                $row4 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+            ?>
+                <td id="td3">Consignee: <?php echo $row4[0]?></td>
             </tr>
         </table>
     </div>
-    <div id="div-2">
+    <div id="div-2"> 
         <h2 id="h05">Shipment Tracking</h2>
         <table>
             <tr>
