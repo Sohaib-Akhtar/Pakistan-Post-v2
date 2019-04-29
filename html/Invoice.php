@@ -1,12 +1,3 @@
-
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-</style>
-</head>
-<body>
-
 <?php
     if(ctype_digit($_GET['q'])){
         $q = intval($_GET['q']);
@@ -51,5 +42,3 @@
         echo "<tr> Invalid Input <tr>";
     }
 ?>
-</body>
-</html> 
