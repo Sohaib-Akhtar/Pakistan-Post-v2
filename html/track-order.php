@@ -40,6 +40,15 @@
         </form>
         <hr>
     </div>
+    <?php 
+    $db_user = "bilal1"; 
+    $db_pass = "bilal";
+    $con = oci_connect($db_user,$db_pass);
+    if(isset($_POST['Track']))
+    {  
+        $barcode=$_POST["brcode"];
+    ?>
+    
     <div id="div-1">
         <h2 id="h04">Shipment Details</h2>
         <table>
@@ -47,7 +56,21 @@
                 <td id="td3">Agent Reference #:</td>
             </tr>
             <tr>
-                <td id="td3">Origin:</td>
+                <?php
+                 $query="SELECT Name AS Origin FROM PostOffice po
+                 INNER JOIN City c
+                 ON c.City_ID = po.City_ID
+                 WHERE PostalCode = (
+                     SELECT PostalCode FROM Invoice
+                     WHERE Invoice_ID = (
+                         SELECT Invoice_ID FROM Mail_Invoice
+                         WHERE Barcode = $barcode))
+                 ";
+                $a = oci_parse($con, $query); 
+                $r = oci_execute($a);                
+                $row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+      ?>
+                <td id="td3">Origin: <?php echo $row[0]?></td>
             </tr>
             <tr>
                 <td id="td3">Destination:</td>
@@ -91,6 +114,7 @@
     <br>
     <br>
     <br>
+    <?php } ?>
     <div class="footer">
         <img src="../images/Favicon.ico" style="float:left; height: 90%">
         <div class="footer-elements">
