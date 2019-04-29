@@ -1,4 +1,4 @@
-﻿<html>
+<html>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 <link rel="stylesheet" href="Web_Styling.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,12 +19,11 @@
     <ul id="ul3">
         <li><a href="main.html"><i class="fa fa-fw fa-home"></i> Home</a></li>
         <li><a href="Register.html"><i class="fa fa-fw fa-address-card"></i> Register Customer</a></li>
-        <li><a class="active" href="Earning.php"><i class="fa fa-fw fa-envelope"></i> Yearly Funds Collection</a></li>
-        <li><a href="track-order.html"><i class="fa fa-fw fa-search"></i> Track Order</a></li>    
+        <li><a class="active" href="TahaEarning.php"><i class="fa fa-fw fa-envelope"></i> Yearly Funds Collection</a></li>
     </ul>
     <div id="d05">
         <h1 align="center">Annual Fund Collection</h1>
-        <form name="reg" action="Earning.php" method="post">
+        <form name="reg" action="TahaEarning.php" method="post">
             <table align="center">
                 <hr>
                 <tr>
@@ -37,15 +36,22 @@
                         <div class="custom-select">
                             <select>
                                 <?php
+                                $db_sid = "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))
+                                                (CONNECT_DATA =
+                                                    (SERVER = DEDICATED)
+                                                    (SERVICE_NAME = TahaFiroz)
+                                            ))"; 
                                 $db_user = "scott"; 
-                                $db_pass = "1234";
-                                 $con = oci_connect($db_user,$db_pass);
-                                 $query1="select distinct extract(year from invoice_date) as year from invoice";
-                                 $a = oci_parse($con, $query1); 
-                                 $r = oci_execute($a);
-                                 $val=0;
-                                 while($row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS))  
-      	                         {
+                                $db_pass = "tiger";
+                                if($con = oci_connect($db_user,$db_pass, $db_sid)){
+                                    echo "Connected Successfully";
+                                }
+                                $query1="select distinct extract(year from invoice_date) as year from invoice";
+                                $a = oci_parse($con, $query1); 
+                                $r = oci_execute($a);
+                                $val=0;
+                                while($row = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS))  
+                                {
                                     echo "<option>" . $row['YEAR'] . "</option>";
                                     $val+=1;
                                 } 

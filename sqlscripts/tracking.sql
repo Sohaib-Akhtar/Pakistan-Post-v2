@@ -1,12 +1,14 @@
 /*
-    Returns Origin Postal Office Name -> Change to Postal Office City
+    Returns Origin City Name
 */
--- SELECT PostOffice_Name AS Origin FROM PostOffice
+-- SELECT Name AS Origin FROM PostOffice po
+-- INNER JOIN City c
+-- ON c.City_ID = po.City_ID
 -- WHERE PostalCode = (
 --     SELECT PostalCode FROM Invoice
 --     WHERE Invoice_ID = (
 --         SELECT Invoice_ID FROM Mail_Invoice
---         WHERE Barcode = 40001932 and Price >0
+--         WHERE Barcode = 40001933
 --     )
 -- );
 
@@ -29,7 +31,7 @@
 -- SELECT Invoice_Date AS BookDate FROM Invoice
 -- WHERE Invoice_ID = (
 --     SELECT Invoice_ID FROM Mail_Invoice
---     WHERE Barcode = 40001932 and Price >0
+--     WHERE Barcode = 40001932
 -- );
 
 
@@ -51,17 +53,18 @@
 --     WHERE Barcode = 40001932
 -- );
 
-/*
 
-Status Tracking
+
+/*
+    Tracking History
 */
 
-/*
-Select ST.TimeStamp,Stype.Description,C.City
-from (((StatusTracking ST inner join StatusType Stype
-On ST.Status_ID=Stype.Status_ID ) inner join PostOffice PO
-on PO.POSTALCODE=ST.POSTALCODE)inner join City C
-on C.cityID=PO.cityID)
-where ST.Barcode="BARCODE";
-	
-	
+SELECT st.TimeStamp, stype.Description, c.City FROM StatusTracking st 
+INNER JOIN StatusType stype
+ON st.Status_ID = stype.Status_ID
+INNER JOIN PostOffice po
+ON po.PostalCode = st.PostalCode
+INNER JOIN City c
+ON c.City_ID = po.City_ID
+WHERE st.Barcode = 
+ORDER BY SerialNo desc;
