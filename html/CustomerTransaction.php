@@ -49,22 +49,21 @@
         </form>
         <hr>
     </div>
-    <div id="div-4">
-        <h2 id="h08">Customer's Details</h2>
-        <table class="display-table3" align="center">
-        <?php 
+    <?php 
+                
                 $db_sid = "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))
                             (CONNECT_DATA =
                                 (SERVER = DEDICATED)
                                 (SERVICE_NAME = TahaFiroz)
                             ))"; 
                 $db_user = "scott"; 
-                $db_pass = "tiger";
+                $db_pass = "1234";
                 $is_id = FALSE;
                 $id = 0;
-                $con = oci_connect($db_user,$db_pass, $db_sid);
+                $con = oci_connect($db_user,$db_pass);
                 if(isset($_POST['View']))
                 {  
+                    $exec=True;
                     $is_cnic= FALSE;
                     $is_id= FALSE;
                     $id = $_POST["CustID"];
@@ -74,7 +73,22 @@
 
                     if(!empty($cnic))
                         $is_cnic = TRUE;
+                    if(!$is_cnic && $is_id){
+                        $q_id="SELECT CUSTOMER_ID FROM Customer
+                        WHERE CUSTOMER_ID = $id
+                        ";
+                        $p_id = oci_parse($con, $q_id); 
+                        $v_id = oci_execute($p_id);
+                        $data=array();
 
+                        while($row_id = oci_fetch_array($p_id, OCI_BOTH+OCI_RETURN_NULLS)){
+                            $data[]=$row_id;
+                        }
+
+                        $num_cnic=count($data);
+                        if($num_cnic==0)
+                        $exec=FALSE;
+                    }
                     if($is_cnic == TRUE && $is_id == TRUE)
                     {
                         $q_id = "SELECT CNIC FROM Customer
@@ -93,7 +107,8 @@
                         }
 
                     }
-                    $query = "";
+                    if($exec)
+                    {$query = "";
                     if($is_id == TRUE){
                         $query="SELECT FirstName || ' ' ||LastName AS CustName, c.Customer_ID AS CUSTID, StreetAddress, City.Name AS CITYNAME, MobileNo, CNIC FROM Customer c
                             INNER JOIN Details d
@@ -126,6 +141,10 @@
                         $is_id = TRUE;
                     }
             ?>
+            <div id="div-4">
+        <h2 id="h08">Customer's Details</h2>
+        <table class="display-table3" align="center">
+        
             <tr>
                 <td id="td4">Customer ID: <?php if(!is_null($row["CUSTID"])) echo $row["CUSTID"]; else echo '-';?></td>
             </tr>
@@ -144,22 +163,9 @@
             <tr>
                 <td id="td4">CNIC: <?php if(!is_null($row["CNIC"])) echo $row["CNIC"]; else echo '-';?></td>
             </tr>
-            <?php } ?>
+            <?php  ?>
         </table>
     </div>
-    <div id="div-4">
-        <h2 id="h07">Transactions History</h2>
-        <table border="true" class="display-table3" align="center">
-            <tr>
-                <th>Parcel Number</th>
-                <th>Desc</th>
-                <th>Qty</th>
-                <th>Reciepient Name</th>
-                <th>Reciepient Addr</th>
-                <th>City</th>
-                <th>Status</th>
-                <th>Date</th>
-            </tr>
             <?php
                 if($is_id)
                 {
@@ -187,6 +193,21 @@
                     "; 
                     $parse = oci_parse($con, $query); 
                     $valid = oci_execute($parse);
+                ?>
+                <div id="div-4">
+                <h2 id="h07">Transactions History</h2>
+                <table border="true" class="display-table3" align="center">
+                <tr>
+                    <th>Parcel Number</th>
+                    <th>Desc</th>
+                    <th>Qty</th>
+                    <th>Reciepient Name</th>
+                    <th>Reciepient Addr</th>
+                    <th>City</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+                <?php
                       
                 while($row = oci_fetch_array($parse, OCI_BOTH+OCI_RETURN_NULLS))
                 { ?>
@@ -215,15 +236,22 @@
                         <td><?php if( !is_null($status_row["DESCRIPTION"]))echo $status_row["DESCRIPTION"];else echo '-';?></td>
                         <td><?php echo $row["INVOICE_DATE"];?></td>
                     </tr>
-            <?php } 
+            <?php } }
+                }else
+                {
+                    ?>
+                    <table align="center">
+                        <tr>
+                            <th>Customer doesn't exist</th>
+                        </tr>
+                    </table>
+            <?php
+                }
             }?>
 
         </table>
         
     </div>
-    <br>
-    <br>
-    <br>
     <div class="footer">
         <img src="../images/Favicon.ico" style="float:left; height: 90%">
         <div class="footer-elements">
