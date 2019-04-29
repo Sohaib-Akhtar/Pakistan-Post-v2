@@ -186,7 +186,7 @@
                         INNER JOIN Customer_Addresses ca
                         ON c.Customer_ID = ca.Customer_ID
                         INNER JOIN DomesticAddresses da
-                        ON ca.Address_ID = da.Address_ID
+                        ON m.R_Address_ID = da.Address_ID
                         INNER JOIN City ct
                         ON ct.City_ID = da.City_ID
                         WHERE c.Customer_ID = $id and minv.Price>0

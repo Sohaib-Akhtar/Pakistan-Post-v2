@@ -31,26 +31,32 @@ th {text-align: left;}
         $db_pass = "tiger";
         $con = oci_connect($db_user,$db_pass, $db_sid);
 
-        $query="SELECT PostOffice_Name ||' '|| Type_Name AS Name FROM PostOffice po
-                INNER JOIN POType pt
-                ON pt.Type_ID = po.Type_ID
-                WHERE PostalCode = $q";
+        $query="SELECT Type_Name AS Description, m.Qty AS Quantity, FirstName || ' '||LastName AS RecipientName, StreetAddress, Invoice_Date
+                FROM Mail m
+                INNER JOIN Mail_Invoice minv
+                ON minv.Barcode = m.Barcode 
+                INNER JOIN Invoice inv
+                ON inv.Invoice_ID = minv.Invoice_ID 
+                INNER JOIN Details d
+                ON d.Details_ID = m.R_Detail_ID
+                LEFT JOIN ContentType ctype
+                ON ctype.ContentType_ID = m.ContentType_ID
+                INNER JOIN DomesticAddresses da
+                ON m.R_Address_ID = da.Address_ID
+                INNER JOIN City ct
+                ON ct.City_ID = da.City_ID
+                WHERE m.Barcode= $q";
         $parsed = oci_parse($con, $query); 
         $result = oci_execute($parsed);
 
-        echo "<table>
-              <tr>
-              <th>PostalCode</th>
-              <th>Name</th>
-              </tr>";
-        
         while($row = oci_fetch_array($parsed)) {
-            echo "<tr>";
             echo "<td>" . $q . "</td>";
-            echo "<td>" . $row['NAME'] . "</td>";
-            echo "</tr>";
+            echo "<td>" . $row['DESCRIPTION'] . "</td>";
+            echo "<td>" . $row['QUANTITY'] . "</td>";
+            echo "<td>" . $row['RECIPIENTNAME'] . "</td>";
+            echo "<td>" . $row['STREETADDRESS'] . "</td>";
+            echo "<td>" . $row['INVOICE_DATE'] . "</td>";
         }   
-        echo "</table>";
     }
     else{
         echo "<tr> Invalid Input <tr>";

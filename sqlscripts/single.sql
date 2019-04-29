@@ -19,6 +19,6 @@ VALUES
 (230002947,70007,04401,TO_DATE('2019-07-26 00:00:00','yyyy/mm/dd hh24:mi:ss'),700,1);
 
 INSERT INTO Mail_Invoice
-(Invoice_ID,Barcode,Price,Signature)
+(Invoice_ID,Barcode,Price,Signature)   
 VALUES
 (230002947,40001933,700,NULL);

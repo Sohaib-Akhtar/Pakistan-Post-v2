@@ -28,12 +28,12 @@
         <div id = "custom-select">
             <form onsubmit="showInfo(document.getElementById('PostalCode').value); return false"  id="testform" >
                     <h1 align="center">Customer Transactions History</h1>
-                    <table align="center">
+                    <table class = "display-table" align="center">
                         <tr>
                             <td id="td2">
-                                PostalCode
-                                <input id = "PostalCode" type="text" placeholder="Branch Postal Code" required pattern = "[0-9]{4,5}">
-                                <input class="registerbtn2" type="submit" name="Display" value="Display"">
+                                Barcode
+                                <input id = "PostalCode" type="text" placeholder="Package Barcode" required pattern = "[0-9]{8}">
+                                <input class="registerbtn2" type="submit" name="Display" value="Add">
                             </td>
                         </tr>
                     </table>
@@ -42,8 +42,17 @@
         <hr>
     </div>
     <div id="d06">
-        <div id = "texthint"></div>
-    </div>
+        <table id = "results" class = "display-table2" align="center">
+            <tr>
+                <th>Tracking#</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Recipient</th>
+                <th>Address</th>
+                <th>Date</th>
+            </tr>
+        </table>
+    </div>  
     <br>
     <br>
     <br>
@@ -66,7 +75,7 @@
 <script>
 function showInfo(str) {
     if (str == "") {
-        document.getElementById("texthint").innerHTML = "";
+        document.getElementById("results").innerHTML = "";
         return;
     } else {
         if (window.XMLHttpRequest) {
@@ -76,7 +85,12 @@ function showInfo(str) {
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 console.log("Query sent");
-                document.getElementById("texthint").innerHTML = this.responseText;
+                if(this.responseText.length > 0)
+                {
+                    var table = document.getElementById("results");
+                    var row = table.insertRow(table.rows.length);
+                    row.innerHTML = this.responseText;
+                }
             }
         };
         xmlhttp.open("GET","Invoice.php?q="+str,true);
