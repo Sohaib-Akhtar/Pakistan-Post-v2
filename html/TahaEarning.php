@@ -72,9 +72,49 @@
         if(isset($_POST['Display'])){
             $id=$_POST['brcode'];
 
+            $query="SELECT postalcode
+                    FROM postoffice
+                    WHERE postalcode='$id'";
+            $data=array();
+            $a1 = oci_parse($con,$query);
+            $r1 = oci_execute($a1);
+            while($row1 = oci_fetch_array($a1, OCI_BOTH+OCI_RETURN_NULLS)){
+                $data[]=$row1;
+            }
+            $num=count($data);
+
+            if($num>0){
+
+            $query="SELECT e.firstname || ' ' || e.lastname AS name, p.postalcode AS bcode, p.postoffice_name AS bname
+            FROM employee e
+            INNER JOIN postoffice p
+            ON e.emp_id=p.manager_id
+            WHERE p.postalcode='$id'";
+            $a1 = oci_parse($con,$query);
+            $r1 = oci_execute($a1);
+            while($row1 = oci_fetch_array($a1, OCI_BOTH+OCI_RETURN_NULLS)){
+                ?>
+                <table>
+                    <tr>
+                        <td id="td4">Manager Name:</td>
+                        <td id="td4"><?php echo $row1['NAME'];?></td>
+                    </tr>
+                    <tr>
+                        <td id="td4">Branch Name:</td>
+                        <td id="td4"><?php echo $row1['BNAME'];?></td>
+                    </tr>
+                    <tr>
+                        <td id="td4">Branch#:</td>
+                        <td id="td4"><?php echo $row1['BCODE'];?></td>
+                    </tr>
+                </table>
+                <hr>
+                <table border="true" class="display-table" align="center">
+            <?php
+            }
             $query="SELECT extract(month FROM invoice_date) AS month,COUNT(invoice_id) AS collections 
                     FROM invoice 
-                    WHERE postalcode='$id'
+                    WHERE postalcode = '$id'
                     GROUP BY extract(month FROM invoice_date)
                     ORDER BY extract(month FROM invoice_date) ASC";
             $a1 = oci_parse($con,$query);
@@ -89,6 +129,9 @@
             </tr>
             <tr id="td2">
             <?php
+                $TOTAL_AG=0;
+                $TOTAL_AR=0;
+                $TOTAL_NA=0;
                 while($row1 = oci_fetch_array($a1, OCI_BOTH+OCI_RETURN_NULLS)){
                     $MONTH = $row1["MONTH"];
                     $STAMP_SUMQUERY="SELECT SUM(sinv.TotalPrice) AS POSSUM FROM StampInvoice sinv
@@ -127,15 +170,22 @@
                     if($STAMP_SUM != FALSE){
                         $NETSUM += $STAMP_SUM["POSSUM"];
                         $NETGATHERED += $STAMP_SUM["POSSUM"];
+                        $TOTAL_NA +=$NETSUM;
+                        $TOTAL_AG +=$NETGATHERED;
                     }
 
                     if ($SUM != FALSE){
                         $NETSUM += $SUM["POSSUM"];
                         $NETGATHERED += $SUM["POSSUM"];
+                        $TOTAL_NA +=$NETSUM;
+                        $TOTAL_AG +=$NETGATHERED;
                     }
 
-                    if($NEGSUM != FALSE)
+                    if($NEGSUM != FALSE){
                         $NETSUM += $NEGSUM["NEGSUM"];
+                        $TOTAL_AR += $NEGSUM['NEGSUM'];
+                        $TOTAL_NA +=$NEGSUM['NEGSUM'];
+                    }
             ?>
             <tr>
                 <td id="td2"><?php if ($row1["COLLECTIONS"])echo $row1["COLLECTIONS"]; else echo '-';?></td>
@@ -144,8 +194,37 @@
                 <td id="td2"><?php if ($NEGSUM != False && $NEGSUM["NEGSUM"]<0)echo $NEGSUM["NEGSUM"]; else echo '-';?></td>
                 <td id="td2"><?php echo $NETSUM;?></td> 
             </tr>   
-           <?php }} ?>
-           </table>
+           <?php }
+            ?>
+            </table>
+            <hr>
+            <table>
+                <tr>
+                    <td id="td4">Total Amount Gathered:</td>
+                    <td id="td4"><?php echo $TOTAL_AG;?></td>
+                </tr>
+                <tr>
+                    <td id="td4">Total Amount Returned:</td>
+                    <td id="td4"><?php echo $TOTAL_AR;?></td>
+                </tr>
+                <tr>
+                    <td id="td4">Total Net Sum Amount:</td>
+                    <td id="td4"><?php echo $TOTAL_NA;?></td>
+                </tr>
+            </table>
+            <?php
+            }
+            else{
+            ?>
+            <table align="center">
+                <tr>
+                    <th>Branch Doesn't Exist</th>
+                </tr>
+            </table>
+            <?php
+            }
+            }
+            ?>
     </div>
     <div class="footer">
         <img src="../images/Favicon.ico" style="float:left; height: 90%">
