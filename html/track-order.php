@@ -18,10 +18,10 @@
     </div>
     <ul id="ul3">
         <li><a href="main.html"><i class="fa fa-fw fa-home"></i> Home</a></li>
-        <li><a href="Register.html"><i class="fa fa-fw fa-address-card"></i> Register Customer</a></li>
+        <li><a href="Test.php"><i class="fa fa-fw fa-history"></i>Add Mail/Parcel</a></li>
         <li><a href="Earning.php"><i class="fa fa-fw fa-envelope"></i> Yearly Funds Collection</a></li>
         <li><a class="active" href="track-order.php"><i class="fa fa-fw fa-search"></i> Track Order</a></li>
-        <li><a href="cutomer-transactions.html"><i class="fa fa-fw fa-history"></i> Customer Transactions</a></li>
+        <li><a href="CustomerTransaction.php"><i class="fa fa-fw fa-history"></i> Customer Transactions</a></li>
     </ul>
     <div id="d06">
         <h1 align="center">Track Your Order</h1>
