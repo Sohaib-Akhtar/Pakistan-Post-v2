@@ -131,6 +131,16 @@
         <h2 id="h05">Shipment Tracking</h2>
         <table>
             <tr>
+            <?php
+                 $query="SELECT FirstName || ' ' || LastName AS Cosignee FROM Details
+                 WHERE Details_ID = (
+                     SELECT R_Detail_ID FROM Mail
+                     WHERE Barcode  =$barcode
+                 )";
+                $a = oci_parse($con, $query); 
+                $r = oci_execute($a);                
+                $row4 = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS);  
+            ?>
                 <td id="td3">Current Status:</td>
             </tr>
             <tr>
@@ -146,10 +156,32 @@
         <h2 id="h06">Track History</h2>
         <table border="true" class="display-table2" align="center">
             <tr>
+            <?php
+                 $query="SELECT st.TimeStamp, stype.Description, c.Name FROM StatusTracking st 
+                 INNER JOIN StatusType stype
+                 ON st.Status_ID = stype.Status_ID
+                 INNER JOIN PostOffice po
+                 ON po.PostalCode = st.PostalCode
+                 INNER JOIN City c
+                 ON c.City_ID = po.City_ID
+                 WHERE st.Barcode = 40001924
+                 ORDER BY SerialNo desc";
+                $a = oci_parse($con, $query); 
+                $r = oci_execute($a);                  
+            ?>
                 <th>Date Time</th>
                 <th>Status</th>
                 <th>Location</th>
             </tr>
+            <?php while( $trackrow = oci_fetch_array($a, OCI_BOTH+OCI_RETURN_NULLS))
+            { ?>
+            <tr>
+                <td><?php echo $trackrow[0]?></th>
+                <td><?php echo $trackrow[1]?></th>
+                <td><?php echo $trackrow[2]?></th>
+            </tr>
+            <?php }
+            ?>
         </table>
     </div>
     <br>
