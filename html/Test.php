@@ -52,14 +52,9 @@
                         <div class="custom-select">
                         <select>
                         <?php
-                           $db_sid = "(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))
-                            (CONNECT_DATA =
-                                (SERVER = DEDICATED)
-                                (SERVICE_NAME = TahaFiroz)
-                            ))"; 
                             $db_user = "scott"; 
-                            $db_pass = "tiger";
-                            $con = oci_connect($db_user,$db_pass, $db_sid);
+                            $db_pass = "1234";
+                            $con = oci_connect($db_user,$db_pass);
                             $query1="select city_id,name from city";
                             $a = oci_parse($con, $query1); 
                             $r = oci_execute($a);
@@ -113,6 +108,9 @@
                             <div class="custom-select">
                                 <select>
                                     <?php
+                                    $db_user = "scott"; 
+                                    $db_pass = "1234";
+                                     $con = oci_connect($db_user,$db_pass);
                                      $query1="select contenttype_id,type_name from contenttype";
                                      $a = oci_parse($con, $query1); 
                                      $r = oci_execute($a);
@@ -130,6 +128,9 @@
                             <div class="custom-select">
                                 <select>
                                     <?php
+                                    $db_user = "scott"; 
+                                    $db_pass = "1234";
+                                     $con = oci_connect($db_user,$db_pass);
                                      $query1="select priority_id,name from priority";
                                      $a = oci_parse($con, $query1); 
                                      $r = oci_execute($a);
@@ -149,6 +150,9 @@
                             <div class="custom-select">
                                 <select>
                                     <?php
+                                    $db_user = "scott"; 
+                                    $db_pass = "1234";
+                                     $con = oci_connect($db_user,$db_pass);
                                      $query1="select mailtype_id,type_name from mailtype";
                                      $a = oci_parse($con, $query1); 
                                      $r = oci_execute($a);
