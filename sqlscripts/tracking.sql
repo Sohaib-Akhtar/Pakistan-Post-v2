@@ -50,3 +50,18 @@
 --     SELECT R_Detail_ID FROM Mail
 --     WHERE Barcode = 40001932
 -- );
+
+/*
+
+Status Tracking
+*/
+
+/*
+Select ST.TimeStamp,Stype.Description,C.City
+from (((StatusTracking ST inner join StatusType Stype
+On ST.Status_ID=Stype.Status_ID ) inner join PostOffice PO
+on PO.POSTALCODE=ST.POSTALCODE)inner join City C
+on C.cityID=PO.cityID)
+where ST.Barcode="BARCODE";
+	
+	
